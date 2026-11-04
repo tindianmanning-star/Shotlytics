@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101511"><link rel="manifest" href="manifest.webmanifest">
+<title>ShotLytics</title>
+<style>
+:root{color-scheme:dark;--bg:#0d120f;--p:#171f1a;--p2:#202a23;--line:#344238;--lime:#9bea37;--muted:#a9b5aa;--w:#f5f8f4}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--w);font:16px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{padding:18px;background:#101712;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:2}
+.brand{font-size:25px;font-weight:800}.brand span{color:var(--lime)}.sub{font-size:12px;color:var(--muted);margin-top:3px}
+nav{display:flex;gap:8px;margin-top:14px;overflow:auto}button,select,input{font:inherit}button{border:1px solid var(--line);background:var(--p2);color:var(--w);border-radius:11px;padding:11px 14px}button.active,.primary{background:var(--lime);color:#14200e;border-color:var(--lime);font-weight:700}
+main{max-width:900px;margin:auto;padding:14px}.card{background:var(--p);border:1px solid var(--line);border-radius:15px;padding:14px;margin-bottom:12px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.metric small{font-size:11px;color:var(--muted);text-transform:uppercase}.metric strong{display:block;font-size:30px;margin:7px 0}.muted{color:var(--muted);font-size:13px;line-height:1.45}
+h2{font-size:17px;margin:0 0 10px}label{display:block;color:var(--muted);font-size:12px;margin:10px 0 5px}
+input,select{width:100%;padding:12px;border-radius:9px;border:1px solid var(--line);background:#0e1510;color:var(--w)}
+.form{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.hidden{display:none!important}.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:13px}td,th{text-align:left;padding:9px 6px;border-bottom:1px solid var(--line);white-space:nowrap}th{color:var(--muted)}
+.pill{font-size:11px;color:var(--muted);border:1px solid var(--line);padding:5px 9px;border-radius:99px}
+@media(max-width:600px){.grid{grid-template-columns:repeat(2,1fr)}.metric:last-child{grid-column:span 2}.form{grid-template-columns:1fr}}
+</style></head><body>
+<header><div class="brand">SHOT<span>LYTICS</span></div><div class="sub">PRACTICE · ANALYSE · IMPROVE</div>
+<nav><button class="active" data-tab="practice">Practice</button><button data-tab="history">Shot history</button><button data-tab="hardware">Hardware</button></nav></header>
+<main>
+<section id="practice">
+<div class="card"><b>Practice session</b><div class="muted">Manual shot log · ready for future sensors</div></div>
+<div class="grid">
+<div class="card metric"><small>Average ball speed</small><strong id="avgBall">—</strong><span class="muted">mph</span></div>
+<div class="card metric"><small>Average club speed</small><strong id="avgClub">—</strong><span class="muted">mph</span></div>
+<div class="card metric"><small>Average carry</small><strong id="avgCarry">—</strong><span class="muted">metres</span></div></div>
+<div class="card"><h2>Record a shot</h2><p class="muted">Enter readings from a launch monitor or practice notes. Blank readings remain blank; this app does not invent measurements.</p>
+<div class="form">
+<div><label>Club</label><select id="club"><option>Driver</option><option>3 Wood</option><option>5 Wood</option><option>7 Wood</option><option>4 Iron</option><option>5 Iron</option><option>6 Iron</option><option>7 Iron</option><option>8 Iron</option><option>9 Iron</option><option>Pitching Wedge</option></select></div>
+<div><label>Ball speed (mph)</label><input id="ball" type="number" step=".1" placeholder="e.g. 145"></div>
+<div><label>Club speed (mph)</label><input id="clubSpeed" type="number" step=".1" placeholder="e.g. 100"></div>
+<div><label>Launch angle (°)</label><input id="launch" type="number" step=".1" placeholder="e.g. 14"></div>
+<div><label>Carry (metres)</label><input id="carry" type="number" step=".1" placeholder="e.g. 230"></div>
+<div><label>Total (metres)</label><input id="total" type="number" step=".1" placeholder="e.g. 250"></div>
+<div><label>Direction</label><select id="direction"><option value="">Not recorded</option><option>Left</option><option>Straight</option><option>Right</option></select></div>
+<div><label>Notes</label><input id="notes" placeholder="Strike, shape, feel…"></div></div>
+<div class="actions"><button class="primary" id="save">Save shot</button><button id="clear">Clear all shots</button></div><p id="msg" class="muted">Saved locally in this browser on this iPad.</p></div>
+<div class="card"><h2>Camera analysis</h2><p class="muted">Use the iPad Camera app or V1 Golf for slow-motion video. This starter dashboard does not yet capture video or calculate launch-monitor readings from footage.</p><span class="pill">Video integration planned</span></div>
+</section>
+<section id="history" class="hidden"><div class="card"><div style="display:flex;justify-content:space-between;gap:8px"><h2>Shot history</h2><button id="csv">Export CSV</button></div><div class="tablewrap"><table><thead><tr><th>Date</th><th>Club</th><th>Ball mph</th><th>Club mph</th><th>Carry m</th><th>Direction</th></tr></thead><tbody id="rows"></tbody></table></div></div></section>
+<section id="hardware" class="hidden"><div class="card"><h2>Future ESP32 integration</h2><span class="pill">Not connected · planned</span><p class="muted">Future local Wi-Fi connection for calibrated optical ball-speed sensors and other validated measurement modules. This starter version does not connect to an ESP32 or E6.</p><ul class="muted"><li>Ball speed: optical timing gates</li><li>Club speed: separate validated sensor or camera analysis</li><li>Launch angle and direction: additional calibrated sensing</li><li>Shot timestamps and club selection</li></ul></div></section>
+</main><footer class="muted" style="text-align:center;padding:10px 15px 25px">ShotLytics starter · Local browser storage · No launch monitor connected</footer>
+<script>
+const K='shotlytics-shots-v1';let shots=JSON.parse(localStorage.getItem(K)||'[]');const $=x=>document.getElementById(x);
+function average(k){let a=shots.map(s=>Number(s[k])).filter(v=>v>0&&Number.isFinite(v));return a.length?(a.reduce((x,y)=>x+y,0)/a.length).toFixed(1):'—'}
+function render(){$('avgBall').textContent=average('ball');$('avgClub').textContent=average('clubSpeed');$('avgCarry').textContent=average('carry');let r=$('rows');r.innerHTML='';if(!shots.length){r.innerHTML='<tr><td colspan="6" class="muted">No shots recorded yet.</td></tr>';return}
+[...shots].reverse().forEach(s=>{let tr=document.createElement('tr');[new Date(s.time).toLocaleString(),s.club,s.ball||'—',s.clubSpeed||'—',s.carry||'—',s.direction||'—'].forEach(v=>{let td=document.createElement('td');td.textContent=v;tr.appendChild(td)});r.appendChild(tr)})}
+$('save').onclick=()=>{let v=id=>$(id).value.trim();let s={time:new Date().toISOString(),club:v('club'),ball:v('ball'),clubSpeed:v('clubSpeed'),launch:v('launch'),carry:v('carry'),total:v('total'),direction:v('direction'),notes:v('notes')};if(![s.ball,s.clubSpeed,s.launch,s.carry,s.total,s.notes,s.direction].some(Boolean)){$('msg').textContent='Enter at least one reading or note.';return}shots.push(s);localStorage.setItem(K,JSON.stringify(shots));render();['ball','clubSpeed','launch','carry','total','direction','notes'].forEach(id=>$(id).value='');$('msg').textContent='Shot saved on this iPad.'};
+$('clear').onclick=()=>{if(confirm('Delete all locally saved shots?')){shots=[];localStorage.setItem(K,'[]');render()}};
+document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x===b));['practice','history','hardware'].forEach(id=>$(id).classList.toggle('hidden',id!==b.dataset.tab))});
+$('csv').onclick=()=>{let c=['time','club','ball','clubSpeed','launch','carry','total','direction','notes'];let q=x=>'"'+String(x??'').replaceAll('"','""')+'"';let data=[c.join(','),...shots.map(s=>c.map(k=>q(s[k])).join(','))].join('\n');let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'text/csv'}));a.download='shotlytics-shots.csv';a.click();URL.revokeObjectURL(a.href)};
+if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});render();
+</script></body></html>
