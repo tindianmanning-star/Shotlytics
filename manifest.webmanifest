@@ -1,9 +1,1 @@
-{
-  "name": "ShotLytics Golf Practice",
-  "short_name": "ShotLytics",
-  "start_url": "./",
-  "display": "standalone",
-  "background_color": "#0d120f",
-  "theme_color": "#101511",
-  "icons": []
-}
+{"name":"ShotLytics Golf Practice","short_name":"ShotLytics","start_url":"./","display":"standalone","background_color":"#0d120f","theme_color":"#101511","icons":[]}
