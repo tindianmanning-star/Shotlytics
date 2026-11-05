@@ -300,9 +300,16 @@ input,select{width:100%;padding:12px;border-radius:9px;border:1px solid var(--li
  .cameraSide{width:min(230px,54%)!important;right:7px;bottom:7px}
 }
 
-</style></head><body>
+</style>
+<style>
+#analyzegolf .card{margin-bottom:14px}
+#analyzegolf #agFrameWrap{height:72vh;min-height:560px}
+#analyzegolf textarea,#analyzegolf input,#analyzegolf select{width:100%;box-sizing:border-box}
+@media(max-width:700px){#analyzegolf #agFrameWrap{height:68vh;min-height:480px}}
+</style>
+</head><body>
 <header><div class="brand">SHOT<span>LYTICS</span></div><div class="sub">PRACTICE · ANALYSE · IMPROVE</div>
-<nav><button class="active" data-tab="practice">Practice</button><button data-tab="camera">Camera</button><button data-tab="openvideo">Open video</button><button data-tab="analysevideo">Analyse video</button><button data-tab="insights">Club insights</button><button data-tab="history">Shot history</button><button data-tab="hardware">Hardware</button></nav></header>
+<nav><button class="active" data-tab="practice">Practice</button><button data-tab="camera">Camera</button><button data-tab="openvideo">Open video</button><button data-tab="analysevideo">Analyse video</button><button data-tab="birdies">18Birdies AI</button><button data-tab="analyzegolf">Analyze.Golf</button><button data-tab="insights">Club insights</button><button data-tab="history">Shot history</button><button data-tab="hardware">Hardware</button></nav></header>
 <main>
 <section id="practice">
 <div class="card"><b>Practice session</b><div class="muted">V16 · camera tools, video review and shot history</div></div>
@@ -455,13 +462,94 @@ input,select{width:100%;padding:12px;border-radius:9px;border:1px solid var(--li
   </div>
 </section>
 
+
+<section id="birdies" class="hidden">
+  <div class="card">
+    <h2>18Birdies AI swing analysis</h2>
+    <p class="muted">ShotLytics records and keeps your swing. Submit the video to 18Birdies AI Coach, then bring the complete feedback back here. This is a guided transfer workflow; direct automatic account syncing is not currently supported.</p>
+    <div class="actions">
+      <button id="birdiesOpenCamera" class="primary">Record a swing</button>
+      <button id="birdiesOpenVideo">Choose recorded video</button>
+    </div>
+    <ol class="muted">
+      <li>Record or select your swing in ShotLytics.</li>
+      <li>Use the video share/open action to send it to 18Birdies, or save it to Photos and upload it in 18Birdies AI Coach → Analyse My Swing.</li>
+      <li>When 18Birdies returns its analysis, enter or paste the complete feedback below and save it against this swing.</li>
+    </ol>
+  </div>
+  <div class="card">
+    <h2>Save an 18Birdies analysis</h2>
+    <label class="muted">Swing date</label><input id="birdiesDate" type="date">
+    <label class="muted">Video filename / reference</label><input id="birdiesVideo" placeholder="e.g. DTL_driver_2026-11-05.mov">
+    <label class="muted">Camera angle</label><select id="birdiesAngle"><option>Down the Line (DTL)</option><option>Face-On</option><option>Other</option></select>
+    <label class="muted">Club</label><input id="birdiesClub" placeholder="e.g. Driver, 7 iron">
+    <label class="muted">18Birdies swing score / rating</label><input id="birdiesScore" placeholder="Enter exactly as shown by 18Birdies">
+    <label class="muted">Overall assessment</label><textarea id="birdiesOverall" rows="3" placeholder="Paste the overall AI assessment"></textarea>
+    <label class="muted">Priority swing fault / main finding</label><textarea id="birdiesFault" rows="3" placeholder="Paste the main issue or priority"></textarea>
+    <label class="muted">Setup observations</label><textarea id="birdiesSetup" rows="2"></textarea>
+    <label class="muted">Backswing observations</label><textarea id="birdiesBackswing" rows="2"></textarea>
+    <label class="muted">Downswing / impact observations</label><textarea id="birdiesImpact" rows="2"></textarea>
+    <label class="muted">Follow-through / finish observations</label><textarea id="birdiesFinish" rows="2"></textarea>
+    <label class="muted">Professional comparison observations</label><textarea id="birdiesPro" rows="3"></textarea>
+    <label class="muted">Recommended drills / practice plan</label><textarea id="birdiesDrills" rows="4" placeholder="Keep all drill names, instructions, repetitions and recommendations"></textarea>
+    <label class="muted">Additional AI feedback / details</label><textarea id="birdiesExtra" rows="4" placeholder="Paste any remaining 18Birdies feedback here"></textarea>
+    <label class="muted">Your own notes and next-session goals</label><textarea id="birdiesNotes" rows="3"></textarea>
+    <label class="muted">Complete original 18Birdies response (optional but recommended)</label><textarea id="birdiesRaw" rows="6" placeholder="Paste the full response here so no feedback is lost"></textarea>
+    <div class="actions"><button id="saveBirdies" class="primary">Save complete analysis</button><button id="exportBirdies">Export all AI analyses</button><button id="importBirdies">Import analysis backup</button><input id="birdiesImportFile" type="file" accept=".json,application/json" hidden></div>
+    <p id="birdiesStatus" class="muted">Analysis records are stored locally on this iPad. Export backups periodically.</p>
+  </div>
+  <div class="card"><div class="sectionhead"><h2>Saved 18Birdies analyses</h2><span id="birdiesCount" class="pill">0 saved</span></div><div id="birdiesRecords" class="muted">No analyses saved yet.</div></div>
+</section>
+
+
+<section id="analyzegolf" class="hidden">
+  <div class="card">
+    <div class="sectionhead"><div><h2>Analyze.Golf workspace</h2><p class="muted">Record → analyse → save, without leaving your ShotLytics dashboard.</p></div><span class="pill">iPad layout</span></div>
+    <div class="actions">
+      <button id="agRecord" class="primary">Record a swing</button>
+      <button id="agOpenVideo">Choose video</button>
+      <button id="agLaunch" class="primary">Open in Safari</button>
+    </div>
+    <div class="muted" style="margin-top:10px">Select or record your swing in ShotLytics first. Then open the analysis workspace below. If the embedded site is blocked by its security settings, use Open in Safari and return here to save the report.</div>
+  </div>
+  <div class="card" style="padding:8px">
+    <div class="sectionhead"><h2>Analyze.Golf analysis interface</h2><span id="agEmbedStatus" class="pill">Loading site…</span></div>
+    <div id="agFrameWrap" style="width:100%;height:72vh;min-height:560px;max-height:900px;background:#080d0c;border:1px solid #394640;border-radius:12px;overflow:hidden">
+      <iframe id="agFrame" title="Analyze.Golf swing analysis" src="https://www.analyze.golf/" allow="camera; clipboard-read; clipboard-write" referrerpolicy="strict-origin-when-cross-origin" style="width:100%;height:100%;border:0;background:#fff"></iframe>
+    </div>
+    <p class="muted">If the page does not load inside this panel, it may prohibit iframe embedding. Tap Open in Safari above; this is a site security restriction, not a ShotLytics fault.</p>
+  </div>
+  <div class="card">
+    <h2>Save Analyze.Golf results</h2>
+    <label class="muted">Analysis date</label><input id="agDate" type="date">
+    <label class="muted">Video filename / ShotLytics reference</label><input id="agVideo" placeholder="e.g. DTL_driver_2026-11-05.mov">
+    <label class="muted">Camera view</label><select id="agView"><option>Down the Line (DTL)</option><option>Face-On</option><option>Other / uncertain</option></select>
+    <label class="muted">Club</label><input id="agClub" placeholder="e.g. Driver, 7 iron">
+    <label class="muted">Handedness</label><select id="agHand"><option>Right-handed</option><option>Left-handed</option><option>Not set</option></select>
+    <label class="muted">Overall score / summary</label><textarea id="agSummary" rows="3" placeholder="Copy the overall result or summary shown"></textarea>
+    <label class="muted">Address phase findings</label><textarea id="agAddress" rows="3"></textarea>
+    <label class="muted">Top of backswing findings</label><textarea id="agTop" rows="3"></textarea>
+    <label class="muted">Impact phase findings</label><textarea id="agImpact" rows="3"></textarea>
+    <label class="muted">Posture / spine / balance metrics</label><textarea id="agPosture" rows="3"></textarea>
+    <label class="muted">Sway / width / sequencing findings</label><textarea id="agSequence" rows="3"></textarea>
+    <label class="muted">Joint centres / measurements</label><textarea id="agJoints" rows="3"></textarea>
+    <label class="muted">Recommended corrections / drills</label><textarea id="agDrills" rows="4"></textarea>
+    <label class="muted">Manual phase overrides / frame numbers</label><textarea id="agFrames" rows="2"></textarea>
+    <label class="muted">Complete copied analysis / additional results</label><textarea id="agRaw" rows="6" placeholder="Paste all remaining results here so nothing is lost"></textarea>
+    <label class="muted">Your notes / next practice focus</label><textarea id="agNotes" rows="3"></textarea>
+    <div class="actions"><button id="agSave" class="primary">Save Analyze.Golf results</button><button id="agExport">Export Analyze.Golf history</button><button id="agImport">Import backup</button><input id="agImportFile" type="file" accept=".json,application/json" hidden></div>
+    <p id="agStatus" class="muted">Saved locally on this iPad. Export backups periodically.</p>
+  </div>
+  <div class="card"><div class="sectionhead"><h2>Saved Analyze.Golf analyses</h2><span id="agCount" class="pill">0 saved</span></div><div id="agRecords" class="muted">No analyses saved yet.</div></div>
+</section>
+
 <section id="insights" class="hidden">
 <div class="card"><h2>Club averages</h2><p class="muted">Averages are calculated only from values you have entered. Each club needs at least one recorded shot.</p><div class="tablewrap"><table><thead><tr><th>Club</th><th>Shots</th><th>Ball mph</th><th>Club mph</th><th>Carry m</th></tr></thead><tbody id="clubRows"></tbody></table></div></div>
 <div class="card"><h2>Shot direction mix</h2><p class="muted">Count of recorded direction labels. This is a category summary, not a measured landing dispersion plot.</p><div id="directionBars"></div></div>
 </section>
 <section id="history" class="hidden"><div class="card"><div class="sectionhead"><h2>Shot history</h2><button id="csv">Export CSV</button></div><div class="tablewrap"><table><thead><tr><th>Date</th><th>Club</th><th>Ball mph</th><th>Club mph</th><th>Carry m</th><th>Direction</th><th>Notes</th></tr></thead><tbody id="rows"></tbody></table></div></div></section>
 <section id="hardware" class="hidden"><div class="card"><h2>Future ESP32 integration</h2><span class="pill">Not connected · planned</span><p class="muted">Future local Wi-Fi connection for calibrated optical ball-speed sensors and other validated measurement modules. This version does not connect to an ESP32 or E6.</p><ul class="muted"><li>Ball speed: optical timing gates</li><li>Club speed: separate validated sensor or camera analysis</li><li>Launch angle and direction: additional calibrated sensing</li><li>Shot timestamps and club selection</li></ul><p class="muted">Keep exporting CSV backups. Browser-local data can be lost if website data is cleared or a different browser/device is used.</p></div></section>
-</main><footer class="muted" style="text-align:center;padding:10px 15px 25px">ShotLytics V16 · Floating camera controls · Open and analyse video · Local browser storage</footer>
+</main><footer class="muted" style="text-align:center;padding:10px 15px 25px">ShotLytics V19 · Integrated Analyze.Golf workspace · 18Birdies archive · Local browser storage</footer>
 <script>
 const K='shotlytics-shots-v1';let shots=JSON.parse(localStorage.getItem(K)||'[]');const $=x=>document.getElementById(x);
 function avg(a,k){let v=a.map(s=>Number(s[k])).filter(n=>n>0&&Number.isFinite(n));return v.length?(v.reduce((x,y)=>x+y,0)/v.length).toFixed(1):'—'}
@@ -475,7 +563,7 @@ function render(){
 }
 $('save').onclick=()=>{let v=id=>$(id).value.trim();let s={time:new Date().toISOString(),club:v('club'),ball:v('ball'),clubSpeed:v('clubSpeed'),launch:v('launch'),carry:v('carry'),total:v('total'),direction:v('direction'),notes:v('notes')};if(![s.ball,s.clubSpeed,s.launch,s.carry,s.total,s.notes,s.direction].some(Boolean)){$('msg').textContent='Enter at least one reading or note.';return}shots.push(s);localStorage.setItem(K,JSON.stringify(shots));render();['ball','clubSpeed','launch','carry','total','direction','notes'].forEach(id=>$(id).value='');$('msg').textContent='Shot saved on this iPad.'};
 $('clear').onclick=()=>{if(confirm('Delete all locally saved shots?')){shots=[];localStorage.setItem(K,'[]');render()}};
-document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x===b));['practice','camera','openvideo','analysevideo','insights','history','hardware'].forEach(id=>$(id).classList.toggle('hidden',id!==b.dataset.tab));document.body.classList.toggle('cameraMode',b.dataset.tab==='camera')});
+document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x===b));['practice','camera','openvideo','analysevideo','birdies','analyzegolf','insights','history','hardware'].forEach(id=>$(id).classList.toggle('hidden',id!==b.dataset.tab));document.body.classList.toggle('cameraMode',b.dataset.tab==='camera')});
 $('csv').onclick=()=>{let c=['time','club','ball','clubSpeed','launch','carry','total','direction','notes'];let q=x=>'"'+String(x??'').replaceAll('"','""')+'"';let data=[c.join(','),...shots.map(s=>c.map(k=>q(s[k])).join(','))].join('\n');let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'text/csv'}));a.download='shotlytics-shots.csv';a.click();URL.revokeObjectURL(a.href)};
 
 
@@ -721,4 +809,98 @@ $('saveSwingReview').onclick=()=>{
 };
 
 if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});render();
+
+// V17: 18Birdies AI analysis archive. Keeps full text and structured feedback locally.
+const birdiesKey='shotlytics-18birdies-analysis-v1';
+let birdiesRecords=JSON.parse(localStorage.getItem(birdiesKey)||'[]');
+const birdiesFields=['Date','Video','Angle','Club','Score','Overall','Fault','Setup','Backswing','Impact','Finish','Pro','Drills','Extra','Notes','Raw'];
+function birdiesVal(id){return $(id).value.trim();}
+function renderBirdies(){
+  $('birdiesCount').textContent=birdiesRecords.length+' saved';
+  const host=$('birdiesRecords');
+  if(!birdiesRecords.length){host.textContent='No analyses saved yet.';return;}
+  host.innerHTML='';
+  [...birdiesRecords].reverse().forEach((r)=>{
+    const card=document.createElement('div');card.className='card';card.style.marginTop='10px';
+    const h=document.createElement('b');h.textContent=(r.date||'Undated')+' · '+(r.club||'Club not specified')+' · '+(r.angle||'Angle not specified');card.appendChild(h);
+    const score=document.createElement('p');score.textContent='18Birdies rating: '+(r.score||'Not entered');card.appendChild(score);
+    ['overall','fault','setup','backswing','impact','finish','pro','drills','extra','notes','raw'].forEach(k=>{
+      if(r[k]){const d=document.createElement('p');d.style.whiteSpace='pre-wrap';const b=document.createElement('b');b.textContent=k.charAt(0).toUpperCase()+k.slice(1)+': ';d.appendChild(b);d.appendChild(document.createTextNode(r[k]));card.appendChild(d);}
+    });
+    if(r.video){const v=document.createElement('p');v.textContent='Video reference: '+r.video;card.appendChild(v);}
+    const del=document.createElement('button');del.textContent='Delete this analysis';del.onclick=()=>{if(confirm('Delete this saved 18Birdies analysis?')){birdiesRecords=birdiesRecords.filter(x=>x.id!==r.id);localStorage.setItem(birdiesKey,JSON.stringify(birdiesRecords));renderBirdies();}};card.appendChild(del);
+    host.appendChild(card);
+  });
+}
+$('birdiesDate').value=new Date().toISOString().slice(0,10);
+$('birdiesOpenCamera').onclick=()=>document.querySelector('[data-tab="camera"]').click();
+$('birdiesOpenVideo').onclick=()=>document.querySelector('[data-tab="openvideo"]').click();
+$('saveBirdies').onclick=()=>{
+ const record={id:Date.now().toString(),date:birdiesVal('birdiesDate'),video:birdiesVal('birdiesVideo'),angle:birdiesVal('birdiesAngle'),club:birdiesVal('birdiesClub'),score:birdiesVal('birdiesScore'),overall:birdiesVal('birdiesOverall'),fault:birdiesVal('birdiesFault'),setup:birdiesVal('birdiesSetup'),backswing:birdiesVal('birdiesBackswing'),impact:birdiesVal('birdiesImpact'),finish:birdiesVal('birdiesFinish'),pro:birdiesVal('birdiesPro'),drills:birdiesVal('birdiesDrills'),extra:birdiesVal('birdiesExtra'),notes:birdiesVal('birdiesNotes'),raw:birdiesVal('birdiesRaw'),savedAt:new Date().toISOString()};
+ if(!record.overall&&!record.fault&&!record.raw&&!record.drills){$('birdiesStatus').textContent='Add at least some 18Birdies feedback before saving.';return;}
+ birdiesRecords.push(record);
+ try{localStorage.setItem(birdiesKey,JSON.stringify(birdiesRecords));$('birdiesStatus').textContent='Complete analysis saved on this iPad.';renderBirdies();}
+ catch(e){birdiesRecords.pop();$('birdiesStatus').textContent='Storage is full. Export existing analyses and shorten very large text entries.';}
+};
+$('exportBirdies').onclick=()=>{
+ const blob=new Blob([JSON.stringify({format:'ShotLytics 18Birdies archive',version:1,records:birdiesRecords},null,2)],{type:'application/json'});
+ const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='shotlytics-18birdies-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+};
+$('importBirdies').onclick=()=>$('birdiesImportFile').click();
+$('birdiesImportFile').onchange=async(e)=>{
+ const f=e.target.files[0];if(!f)return;
+ try{const data=JSON.parse(await f.text());const incoming=Array.isArray(data)?data:data.records;if(!Array.isArray(incoming))throw new Error('Invalid backup');
+ const ids=new Set(birdiesRecords.map(x=>x.id));incoming.forEach(r=>{if(!ids.has(r.id)){birdiesRecords.push(r);ids.add(r.id);}});
+ localStorage.setItem(birdiesKey,JSON.stringify(birdiesRecords));renderBirdies();$('birdiesStatus').textContent='Backup imported. Existing records were retained.';}
+ catch(err){$('birdiesStatus').textContent='Could not import that backup file.';}
+ e.target.value='';
+};
+renderBirdies();
+
+
+// V18: Analyze.Golf hand-off and results archive.
+const agKey='shotlytics-analyzegolf-analysis-v1';
+let agRecords=JSON.parse(localStorage.getItem(agKey)||'[]');
+const agIds=['agDate','agVideo','agView','agClub','agHand','agSummary','agAddress','agTop','agImpact','agPosture','agSequence','agJoints','agDrills','agFrames','agRaw','agNotes'];
+function agVal(id){return document.getElementById(id).value.trim();}
+function agRender(){
+ const count=document.getElementById('agCount'),host=document.getElementById('agRecords');
+ count.textContent=agRecords.length+' saved';host.innerHTML='';
+ if(!agRecords.length){host.textContent='No analyses saved yet.';return;}
+ [...agRecords].reverse().forEach(r=>{
+  const card=document.createElement('div');card.className='card';card.style.marginTop='10px';
+  const head=document.createElement('b');head.textContent=(r.date||'Undated')+' · '+(r.club||'Club not specified')+' · '+(r.view||'View not specified');card.appendChild(head);
+  ['video','summary','address','top','impact','posture','sequence','joints','drills','frames','raw','notes'].forEach(k=>{if(r[k]){const p=document.createElement('p');p.style.whiteSpace='pre-wrap';const b=document.createElement('b');b.textContent=k+': ';p.appendChild(b);p.appendChild(document.createTextNode(r[k]));card.appendChild(p);}});
+  const del=document.createElement('button');del.textContent='Delete analysis';del.onclick=()=>{if(confirm('Delete this Analyze.Golf record?')){agRecords=agRecords.filter(x=>x.id!==r.id);localStorage.setItem(agKey,JSON.stringify(agRecords));agRender();}};card.appendChild(del);host.appendChild(card);
+ });
+}
+document.getElementById('agDate').value=new Date().toISOString().slice(0,10);
+document.getElementById('agRecord').onclick=()=>document.querySelector('[data-tab="camera"]').click();
+document.getElementById('agOpenVideo').onclick=()=>document.querySelector('[data-tab="openvideo"]').click();
+document.getElementById('agLaunch').onclick=()=>window.open('https://www.analyze.golf/','_blank','noopener');
+document.getElementById('agFrame').addEventListener('load',()=>{document.getElementById('agEmbedStatus').textContent='Page loaded (interaction depends on site permissions)';});
+
+document.getElementById('agSave').onclick=()=>{
+ const keys=['date','video','view','club','hand','summary','address','top','impact','posture','sequence','joints','drills','frames','raw','notes'];
+ const r={id:Date.now().toString(),savedAt:new Date().toISOString()};
+ keys.forEach((k,i)=>r[k]=agVal(agIds[i]));
+ if(!r.summary&&!r.raw&&!r.address&&!r.top&&!r.impact&&!r.posture&&!r.sequence){document.getElementById('agStatus').textContent='Enter at least one analysis result before saving.';return;}
+ agRecords.push(r);
+ try{localStorage.setItem(agKey,JSON.stringify(agRecords));document.getElementById('agStatus').textContent='Analyze.Golf results saved on this iPad.';agRender();}
+ catch(e){agRecords.pop();document.getElementById('agStatus').textContent='Storage is full. Export a backup and reduce large text entries.';}
+};
+document.getElementById('agExport').onclick=()=>{
+ const blob=new Blob([JSON.stringify({format:'ShotLytics Analyze.Golf archive',version:1,records:agRecords},null,2)],{type:'application/json'});
+ const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='shotlytics-analyzegolf-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+};
+document.getElementById('agImport').onclick=()=>document.getElementById('agImportFile').click();
+document.getElementById('agImportFile').onchange=async e=>{
+ const f=e.target.files[0];if(!f)return;
+ try{const d=JSON.parse(await f.text()),items=Array.isArray(d)?d:d.records;if(!Array.isArray(items))throw Error('bad');
+ const ids=new Set(agRecords.map(x=>x.id));items.forEach(x=>{if(!ids.has(x.id)){agRecords.push(x);ids.add(x.id);}});
+ localStorage.setItem(agKey,JSON.stringify(agRecords));agRender();document.getElementById('agStatus').textContent='Backup imported; existing records retained.';
+ }catch(err){document.getElementById('agStatus').textContent='Could not import that backup.';}e.target.value='';
+};
+agRender();
+
 </script></body></html>
