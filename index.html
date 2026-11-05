@@ -59,6 +59,112 @@ input,select{width:100%;padding:12px;border-radius:9px;border:1px solid var(--li
   .cameraMode .cameraSide .muted{font-size:9px}
 }
 @media(max-width:600px){.grid{grid-template-columns:repeat(2,1fr)}.metric:last-child{grid-column:span 2}.form{grid-template-columns:1fr}}
+
+/* iPad portrait camera layout */
+@media (orientation: portrait) {
+  .cameraMode { height:100svh; overflow:hidden; }
+  .cameraMode header { padding:5px 10px; }
+  .cameraMode .brand { font-size:17px; }
+  .cameraMode nav { gap:5px; flex-wrap:wrap; }
+  .cameraMode nav button { padding:6px 8px; font-size:11px; }
+  .cameraMode main {
+    height:calc(100svh - 150px);
+    max-width:none;
+    margin:0;
+    padding:6px 8px;
+    overflow:hidden;
+  }
+  .cameraMode #camera { height:100%; min-height:0; }
+  .cameraMode #camera > .card { height:100%; min-height:0; padding:8px; margin:0; }
+  .cameraMode .cameraLayout {
+    height:100%;
+    min-height:0;
+    grid-template-columns:minmax(0,1fr);
+    grid-template-rows:minmax(0,26svh) minmax(0,1fr);
+    gap:6px;
+  }
+  .cameraMode .cameraPreviewPane {
+    height:100%;
+    min-height:0;
+    max-height:26svh;
+  }
+  .cameraMode .cameraView {
+    width:100%;
+    height:100%;
+    max-height:26svh;
+    min-height:0;
+    aspect-ratio:16/9;
+    object-fit:contain;
+  }
+  .cameraMode .cameraSide {
+    height:100%;
+    min-height:0;
+    overflow:hidden;
+    gap:4px;
+  }
+  .cameraMode .cameraSide h2 { font-size:14px; margin:0; }
+  .cameraMode .cameraSide .muted { font-size:10px; line-height:1.15; margin:1px 0; }
+  .cameraMode .cameraSide .cameraControls { gap:5px; margin-top:3px; }
+  .cameraMode .cameraSide .cameraControls button {
+    padding:7px 4px;
+    min-height:32px;
+    font-size:11px;
+  }
+  .cameraMode .cameraSide .form {
+    grid-template-columns:1fr 1fr;
+    gap:6px;
+  }
+  .cameraMode .cameraSide .form label { font-size:10px; }
+  .cameraMode .cameraSide select { padding:6px; font-size:11px; }
+  .cameraMode .cameraSide .fineprint { margin-top:auto; }
+  .cameraMode footer { display:none; }
+}
+
+
+/* V9: reference-matched camera composition */
+.camera-reference-layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(190px,.85fr);grid-template-rows:minmax(0,1fr);gap:12px;height:100%;min-height:0;padding:12px}
+.cameraPreviewPane{display:flex;flex-direction:column;min-width:0;min-height:0;gap:8px}
+.cameraView{display:block;width:100%;height:auto;aspect-ratio:4/3;max-height:48vh;min-height:120px;object-fit:contain;background:#050806;border:1px solid var(--line);border-radius:10px}
+.cameraSettings{display:grid;grid-template-columns:1fr 1fr;gap:5px 8px;align-items:end}
+.cameraSettings label{display:block;font-size:12px;margin:0 0 3px}
+.cameraSettings select{width:100%;min-width:0;padding:7px;font-size:12px}
+.cameraSettings p{grid-column:1/-1;margin:0;font-size:11px}
+.cameraSide{display:flex;flex-direction:column;align-items:stretch;gap:7px;min-width:0;min-height:0;overflow:auto}
+.cameraSide h2{font-size:16px;margin:0}
+.cameraSide .muted{font-size:11px;line-height:1.25;margin:0}
+.cameraSide button{width:100%;min-height:38px;padding:8px 6px;font-size:13px}
+.cameraActionGap{height:4px;flex:0 0 4px}
+.cameraSide .fineprint{margin-top:auto}
+.cameraMode{height:100svh;overflow:hidden}
+.cameraMode header{padding:5px 10px}
+.cameraMode .brand{font-size:17px}
+.cameraMode .sub{font-size:9px}
+.cameraMode nav{gap:5px;flex-wrap:nowrap;overflow:hidden}
+.cameraMode nav button{padding:6px 8px;font-size:11px;white-space:nowrap}
+.cameraMode main{height:calc(100svh - 135px);max-width:none;margin:0;padding:6px 8px;overflow:hidden}
+.cameraMode #camera{height:100%;min-height:0}
+.cameraMode #camera>.camera-reference-layout{height:100%;min-height:0;margin:0}
+.cameraMode .cameraView{max-height:48vh}
+.cameraMode .cameraSide{overflow:auto}
+.cameraMode footer{display:none}
+@media (orientation:portrait){
+ .cameraMode main{height:calc(100svh - 135px)}
+ .cameraMode .camera-reference-layout{grid-template-columns:minmax(0,1.15fr) minmax(170px,.85fr);gap:8px;padding:8px}
+ .cameraMode .cameraView{aspect-ratio:4/3;max-height:34svh;min-height:100px}
+ .cameraMode .cameraSettings{grid-template-columns:1fr;gap:4px}
+ .cameraMode .cameraSettings label{font-size:10px}
+ .cameraMode .cameraSettings select{font-size:10px;padding:5px}
+ .cameraMode .cameraSettings p{font-size:10px}
+ .cameraMode .cameraSide{gap:6px}
+ .cameraMode .cameraSide h2{font-size:14px}
+ .cameraMode .cameraSide .muted{font-size:10px}
+ .cameraMode .cameraSide button{min-height:34px;font-size:11px;padding:6px 4px}
+}
+@media(max-height:600px){
+ .cameraMode main{height:calc(100svh - 105px)}
+ .cameraMode .cameraView{max-height:38svh}
+}
+
 </style></head><body>
 <header><div class="brand">SHOT<span>LYTICS</span></div><div class="sub">PRACTICE · ANALYSE · IMPROVE</div>
 <nav><button class="active" data-tab="practice">Practice</button><button data-tab="camera">Camera</button><button data-tab="insights">Club insights</button><button data-tab="history">Shot history</button><button data-tab="hardware">Hardware</button></nav></header>
@@ -84,34 +190,27 @@ input,select{width:100%;padding:12px;border-radius:9px;border:1px solid var(--li
 </section>
 
 <section id="camera" class="hidden">
-<div class="card">
-  <div class="cameraLayout">
-    <div class="cameraPreviewPane">
-      <video id="liveVideo" class="cameraView" autoplay muted playsinline></video>
-    </div>
-    <div class="cameraSide">
-      <h2>Compact golf swing camera</h2>
-      <p class="muted">Compact 16:9 preview · landscape layout · keep the iPad outside the ball path.</p>
-      <div class="cameraControls">
-        <button class="primary" id="startCamera">Start camera</button>
-        <button id="stopCamera" disabled>Stop camera</button>
-      </div>
-      <div class="form">
-        <div><label>Camera quality</label><select id="cameraQuality"><option value="1280,720,30">720p · 30 fps</option><option value="1920,1080,30">1080p · 30 fps</option><option value="640,480,30">480p · 30 fps</option></select></div>
-        <div><label>Camera</label><select id="cameraFacing"><option value="environment">Rear camera</option><option value="user">Front camera</option></select></div>
-      </div>
+<div class="card camera-reference-layout">
+  <div class="cameraPreviewPane">
+    <video id="liveVideo" class="cameraView" autoplay muted playsinline></video>
+    <div class="cameraSettings">
+      <div><label>Camera quality</label><select id="cameraQuality"><option value="1280,720,30">720p · 30 fps (recommended)</option><option value="1920,1080,30">1080p · 30 fps</option><option value="640,480,30">480p · 30 fps</option></select></div>
+      <div><label>Camera</label><select id="cameraFacing"><option value="environment">Rear camera</option><option value="user">Front camera</option></select></div>
       <p id="cameraStatus" class="muted">Camera off. Tap Start camera and allow access.</p>
-      <div class="cameraControls">
-        <button class="primary" id="recordVideo" disabled>● Record swing</button>
-        <button id="stopRecording" disabled>Stop recording</button>
-      </div>
-      <p id="recordStatus" class="muted">Ready to record.</p>
-      <div class="cameraControls">
-        <button id="downloadVideo" disabled>Save video</button>
-        <button id="liveAgain" disabled>Live preview</button>
-      </div>
-      <p class="muted fineprint">Normal-speed recording. Frame rate depends on Safari and iPad hardware. No ball-speed or spin measurement.</p>
     </div>
+  </div>
+  <div class="cameraSide">
+    <h2>iPad swing camera</h2>
+    <p class="muted">Keep the iPad safely outside the ball path.</p>
+    <button class="primary" id="startCamera">Start camera</button>
+    <button id="stopCamera" disabled>Stop camera</button>
+    <div class="cameraActionGap"></div>
+    <button class="primary" id="recordVideo" disabled>● Start recording</button>
+    <button id="stopRecording" disabled>Stop recording</button>
+    <p id="recordStatus" class="muted">No recording yet.</p>
+    <button id="downloadVideo" disabled>Save video to Files</button>
+    <button id="liveAgain" disabled>Return to live preview</button>
+    <p class="muted fineprint">Normal-speed recording. Frame rate depends on Safari and iPad hardware.</p>
   </div>
 </div>
 </section>
