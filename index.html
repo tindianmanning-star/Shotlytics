@@ -14,25 +14,50 @@ h2{font-size:17px;margin:0 0 10px}label{display:block;color:var(--muted);font-si
 input,select{width:100%;padding:12px;border-radius:9px;border:1px solid var(--line);background:#0e1510;color:var(--w)}
 .form{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
 .hidden{display:none!important}.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:13px}td,th{text-align:left;padding:9px 6px;border-bottom:1px solid var(--line);white-space:nowrap}th{color:var(--muted)}
-.pill{font-size:11px;color:var(--muted);border:1px solid var(--line);padding:5px 9px;border-radius:99px}.barrow{display:grid;grid-template-columns:85px 1fr 55px;gap:8px;align-items:center;margin:10px 0;font-size:12px}.bar{height:10px;border-radius:20px;background:#29352d;overflow:hidden}.bar i{display:block;height:100%;background:var(--lime);border-radius:20px}.sectionhead{display:flex;justify-content:space-between;align-items:center;gap:8px}\n.cameraView{width:100%;height:auto;aspect-ratio:16/9;max-height:56vh;background:#050806;border-radius:12px;object-fit:contain;border:1px solid var(--line)}
-.cameraControls{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.cameraControls button{flex:1;min-width:120px}
+.pill{font-size:11px;color:var(--muted);border:1px solid var(--line);padding:5px 9px;border-radius:99px}.barrow{display:grid;grid-template-columns:85px 1fr 55px;gap:8px;align-items:center;margin:10px 0;font-size:12px}.bar{height:10px;border-radius:20px;background:#29352d;overflow:hidden}.bar i{display:block;height:100%;background:var(--lime);border-radius:20px}.sectionhead{display:flex;justify-content:space-between;align-items:center;gap:8px}\n
+.cameraView{display:block;width:100%;height:auto;aspect-ratio:16/9;max-height:42vh;min-height:180px;object-fit:contain;background:#050806;border:1px solid var(--line);border-radius:10px}
+.cameraControls{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:7px}
+.cameraControls button{width:100%;min-width:0;padding:10px 8px;font-size:14px}
 .recordingDot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#ef4444;margin-right:6px}
-.cameraLayout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(260px,.85fr);gap:14px;align-items:start}
-.cameraSide{display:flex;flex-direction:column;gap:10px}.cameraSide .form{grid-template-columns:1fr}
-.cameraSide label{margin:5px 0 4px}.cameraSide .muted{margin:6px 0}
-.cameraMode header{padding:7px 14px}.cameraMode .brand{font-size:20px}.cameraMode .sub{font-size:10px}.cameraMode nav{margin-top:5px;gap:6px}.cameraMode nav button{padding:7px 10px;font-size:13px}
-.cameraMode main{max-width:1250px;padding:8px 12px}.cameraMode .card{padding:10px;margin:0}
-.cameraMode #camera{height:calc(100svh - 95px)}
-.cameraMode #camera>.card{height:100%}
-.cameraMode .cameraLayout{height:100%;grid-template-columns:minmax(0,1.5fr) minmax(270px,.8fr)}
-.cameraMode .cameraView{height:calc(100% - 4px);max-height:calc(100svh - 145px);aspect-ratio:auto;min-height:0}
-.cameraMode .cameraSide{height:100%;justify-content:flex-start;overflow:auto}
-.cameraMode .cameraSide h2{margin-bottom:4px}
-.cameraMode .cameraSide .muted{font-size:12px;line-height:1.3}
+.cameraLayout{display:grid;grid-template-columns:minmax(0, 1.8fr) minmax(250px, .9fr);gap:12px;height:100%;min-height:0}
+.cameraPreviewPane{min-width:0;min-height:0;height:auto;display:flex;align-items:center;justify-content:center}
+.cameraSide{display:flex;flex-direction:column;gap:6px;min-width:0;min-height:0;overflow:hidden}
+.cameraSide .form{grid-template-columns:1fr;gap:4px}
+.cameraSide label{margin:3px 0 2px}
+.cameraSide .muted{font-size:11px;line-height:1.25;margin:2px 0}
+.cameraMode{height:100vh;overflow:hidden}
+.cameraMode header{position:relative;padding:5px 12px}
+.cameraMode .brand{font-size:18px;line-height:1.1}
+.cameraMode .sub{font-size:9px;margin-top:1px}
+.cameraMode nav{margin-top:4px;gap:5px}
+.cameraMode nav button{padding:5px 9px;font-size:12px;white-space:nowrap}
+.cameraMode main{height:calc(100vh - 77px);max-width:none;margin:0;padding:7px 10px}
+.cameraMode #camera{height:100%;min-height:0}
+.cameraMode #camera>.card{height:100%;min-height:0;padding:9px;margin:0}
+.cameraMode .cameraLayout{height:100%}
+.cameraMode .cameraView{height:auto;max-height:42vh;aspect-ratio:16/9}
+.cameraMode .cameraSide h2{font-size:16px;margin:0}
+.cameraMode .cameraSide .cameraControls button{padding:9px 5px;font-size:12px}
+.cameraMode .cameraSide input,.cameraMode .cameraSide select{padding:7px;font-size:12px}
+.cameraMode .cameraSide .form label{font-size:10px}
 .cameraMode footer{display:none}
-@media(max-width:700px){.cameraLayout{grid-template-columns:1fr}.cameraMode #camera{height:auto}.cameraMode #camera>.card{height:auto}.cameraMode .cameraLayout{height:auto}.cameraMode .cameraView{height:auto;max-height:38vh;aspect-ratio:16/9}.cameraMode .cameraSide{overflow:visible}.cameraMode footer{display:block}}
-@media(min-width:701px) and (orientation:landscape){body.cameraMode{overflow:hidden}}
-
+.cameraMode .cameraSide .fineprint{margin-top:auto}
+@media(max-width:700px){
+  .cameraMode main{height:calc(100vh - 70px)}
+  .cameraMode .cameraLayout{grid-template-columns:minmax(0,1.35fr) minmax(190px,.9fr);gap:7px}
+  .cameraMode .cameraSide .muted{font-size:10px}
+  .cameraMode .cameraSide .cameraControls button{font-size:11px;padding:8px 3px}
+}
+@media(max-height:520px){
+  .cameraMode header{padding:3px 8px}
+  .cameraMode .brand{font-size:15px}
+  .cameraMode nav button{padding:3px 7px}
+  .cameraMode main{height:calc(100vh - 59px);padding:4px}
+  .cameraMode #camera>.card{padding:5px}
+  .cameraMode .cameraSide{gap:3px}
+  .cameraMode .cameraView{max-height:34vh;min-height:140px}
+  .cameraMode .cameraSide .muted{font-size:9px}
+}
 @media(max-width:600px){.grid{grid-template-columns:repeat(2,1fr)}.metric:last-child{grid-column:span 2}.form{grid-template-columns:1fr}}
 </style></head><body>
 <header><div class="brand">SHOT<span>LYTICS</span></div><div class="sub">PRACTICE · ANALYSE · IMPROVE</div>
@@ -61,14 +86,12 @@ input,select{width:100%;padding:12px;border-radius:9px;border:1px solid var(--li
 <section id="camera" class="hidden">
 <div class="card">
   <div class="cameraLayout">
-    <div>
+    <div class="cameraPreviewPane">
       <video id="liveVideo" class="cameraView" autoplay muted playsinline></video>
     </div>
     <div class="cameraSide">
-      <div>
-        <h2>iPad swing camera</h2>
-        <p class="muted">Position the iPad safely outside the ball's path. Use landscape orientation for the best one-screen layout.</p>
-      </div>
+      <h2>Compact golf swing camera</h2>
+      <p class="muted">Compact 16:9 preview · landscape layout · keep the iPad outside the ball path.</p>
       <div class="cameraControls">
         <button class="primary" id="startCamera">Start camera</button>
         <button id="stopCamera" disabled>Stop camera</button>
@@ -77,17 +100,17 @@ input,select{width:100%;padding:12px;border-radius:9px;border:1px solid var(--li
         <div><label>Camera quality</label><select id="cameraQuality"><option value="1280,720,30">720p · 30 fps</option><option value="1920,1080,30">1080p · 30 fps</option><option value="640,480,30">480p · 30 fps</option></select></div>
         <div><label>Camera</label><select id="cameraFacing"><option value="environment">Rear camera</option><option value="user">Front camera</option></select></div>
       </div>
-      <p id="cameraStatus" class="muted">Camera is off. Allow camera access when Safari asks.</p>
+      <p id="cameraStatus" class="muted">Camera off. Tap Start camera and allow access.</p>
       <div class="cameraControls">
         <button class="primary" id="recordVideo" disabled>● Record swing</button>
         <button id="stopRecording" disabled>Stop recording</button>
       </div>
-      <p id="recordStatus" class="muted">Ready to record when the camera is on.</p>
+      <p id="recordStatus" class="muted">Ready to record.</p>
       <div class="cameraControls">
-        <button id="downloadVideo" disabled>Save video to Files</button>
-        <button id="liveAgain" disabled>Return to live camera</button>
+        <button id="downloadVideo" disabled>Save video</button>
+        <button id="liveAgain" disabled>Live preview</button>
       </div>
-      <p class="muted">Recording is normal-speed video; actual resolution and frame rate depend on Safari and the iPad. This does not calculate ball speed or spin.</p>
+      <p class="muted fineprint">Normal-speed recording. Frame rate depends on Safari and iPad hardware. No ball-speed or spin measurement.</p>
     </div>
   </div>
 </div>
@@ -130,7 +153,7 @@ async function startCamera(){
       video:{facingMode:{ideal:$('cameraFacing').value},width:{ideal:w},height:{ideal:h},frameRate:{ideal:fps,max:fps}}
     });
     liveVideo.pause(); liveVideo.removeAttribute('src'); liveVideo.controls=false; liveVideo.muted=true;
-    liveVideo.srcObject=cameraStream;
+    liveVideo.pause();liveVideo.removeAttribute('src');liveVideo.controls=false;liveVideo.muted=true;liveVideo.srcObject=cameraStream;
     await liveVideo.play();
     $('startCamera').disabled=true; $('stopCamera').disabled=false; $('recordVideo').disabled=false;
     const track=cameraStream.getVideoTracks()[0], settings=track.getSettings?track.getSettings():{};
