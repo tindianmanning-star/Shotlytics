@@ -184,6 +184,93 @@ input,select{width:100%;padding:12px;border-radius:9px;border:1px solid var(--li
  .cameraMode .cameraSide button{font-size:10px;padding:6px 3px}
 }
 
+
+/* V11: orientation-aware camera layout */
+.cameraMode .camera-reference-layout {
+  display:grid;
+  grid-template-columns:minmax(0,1.2fr) minmax(190px,.8fr);
+  grid-template-rows:minmax(0,1fr);
+  gap:12px;
+  align-items:start;
+}
+.cameraMode .cameraPreviewPane { min-width:0; min-height:0; }
+.cameraMode .cameraView {
+  width:100%;
+  height:clamp(220px,48svh,460px);
+  max-height:52svh;
+  min-height:180px;
+  aspect-ratio:4/3;
+  object-fit:contain;
+  background:#050806;
+}
+.cameraMode .cameraSettings { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+.cameraMode .cameraSide { min-width:0; overflow:auto; }
+.cameraMode .cameraSide button { width:100%; box-sizing:border-box; }
+
+/* Portrait: preview first, controls below */
+@media (orientation:portrait) {
+  .cameraMode main {
+    height:auto;
+    min-height:calc(100svh - 145px);
+    overflow:visible;
+    padding:8px;
+  }
+  .cameraMode #camera { height:auto; }
+  .cameraMode #camera > .camera-reference-layout {
+    height:auto;
+    min-height:0;
+    grid-template-columns:minmax(0,1fr);
+    grid-template-rows:auto auto;
+    gap:10px;
+    padding:10px;
+  }
+  .cameraMode .cameraPreviewPane { width:100%; }
+  .cameraMode .cameraView {
+    width:100%;
+    height:clamp(180px,30svh,300px);
+    min-height:180px;
+    max-height:30svh;
+    aspect-ratio:16/9;
+    object-fit:contain;
+  }
+  .cameraMode .cameraSettings {
+    grid-template-columns:1fr 1fr;
+    gap:6px;
+  }
+  .cameraMode .cameraSettings label { font-size:11px; }
+  .cameraMode .cameraSettings select { width:100%; box-sizing:border-box; }
+  .cameraMode .cameraSide {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:7px;
+    align-items:center;
+    overflow:visible;
+  }
+  .cameraMode .cameraSide h2,
+  .cameraMode .cameraSide > p:first-of-type,
+  .cameraMode .cameraSide .fineprint { grid-column:1/-1; }
+  .cameraMode .cameraSide button { min-height:40px; font-size:12px; }
+  .cameraMode .cameraActionGap { display:none; }
+}
+@media (orientation:landscape) {
+  .cameraMode main { height:calc(100svh - 135px); overflow:hidden; }
+  .cameraMode #camera,
+  .cameraMode #camera > .camera-reference-layout { height:100%; min-height:0; }
+  .cameraMode .cameraSide { overflow:auto; }
+}
+
+
+.videoGuideWrap{position:relative;width:100%;min-width:0}
+.videoGuideWrap .cameraView{display:block}
+.swingGuide{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.guideControls{border:1px solid var(--line);border-radius:10px;padding:8px;display:grid;gap:6px}
+.guideToggle{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.guideToggle button{min-height:34px;padding:6px}
+.guideControls p{font-size:11px;line-height:1.25;margin:0}
+.mirrorInstructions{border:1px solid var(--lime);border-radius:10px;padding:9px;font-size:11px;line-height:1.35}
+.mirrorInstructions ol{padding-left:18px;margin:6px 0}
+.mirrorInstructions p{margin:6px 0 0;color:var(--muted)}
+
 </style></head><body>
 <header><div class="brand">SHOT<span>LYTICS</span></div><div class="sub">PRACTICE · ANALYSE · IMPROVE</div>
 <nav><button class="active" data-tab="practice">Practice</button><button data-tab="camera">Camera</button><button data-tab="insights">Club insights</button><button data-tab="history">Shot history</button><button data-tab="hardware">Hardware</button></nav></header>
@@ -211,7 +298,33 @@ input,select{width:100%;padding:12px;border-radius:9px;border:1px solid var(--li
 <section id="camera" class="hidden">
 <div class="card camera-reference-layout">
   <div class="cameraPreviewPane">
-    <video id="liveVideo" class="cameraView" autoplay muted playsinline></video>
+    <div class="videoGuideWrap">
+      <video id="liveVideo" class="cameraView" autoplay muted playsinline></video>
+      <svg id="swingGuide" class="swingGuide" viewBox="0 0 800 520" preserveAspectRatio="none" aria-label="Golfer stance and ball position guide">
+        <g fill="none" stroke="#a5f02f" stroke-width="5" stroke-dasharray="13 10" opacity=".95">
+          <path d="M55 430 H745"/>
+          <path d="M400 35 V445"/>
+        </g>
+        <g stroke="#fff" stroke-width="7" stroke-linejoin="round" fill="#101915" fill-opacity=".45">
+          <circle cx="405" cy="105" r="38"/>
+          <path d="M375 145 Q330 160 315 225 L300 310 Q295 340 325 350 L350 270 L355 405 L430 405 L420 265 L455 340 L480 330 L450 220 Q440 160 420 145 Z"/>
+          <path d="M355 405 L330 455 L390 455 L405 410 M425 405 L445 455 L505 455 L465 410"/>
+        </g>
+        <g fill="#a5f02f" stroke="#111" stroke-width="3">
+          <circle cx="610" cy="430" r="13"/>
+          <path d="M610 410 L610 380 M600 392 L610 380 L620 392" fill="none" stroke="#a5f02f" stroke-width="5"/>
+        </g>
+        <g fill="#111" fill-opacity=".85" stroke="#a5f02f" stroke-width="3">
+          <rect x="35" y="25" width="220" height="48" rx="12"/>
+          <rect x="525" y="350" width="230" height="58" rx="12"/>
+        </g>
+        <g fill="#fff" font-family="Arial,sans-serif" font-size="22" font-weight="700">
+          <text x="52" y="56">STAND / ALIGN HERE</text>
+          <text x="545" y="375">BALL STARTS HERE</text>
+          <text x="545" y="399" font-size="17">Illustrative position guide</text>
+        </g>
+      </svg>
+    </div>
     <div class="cameraSettings">
       <div><label>Camera quality</label><select id="cameraQuality"><option value="1280,720,30">720p · 30 fps (recommended)</option><option value="1920,1080,30">1080p · 30 fps</option><option value="640,480,30">480p · 30 fps</option></select></div>
       <div><label>Camera</label><select id="cameraFacing"><option value="environment">Rear camera</option><option value="user">Front camera</option></select></div>
@@ -229,6 +342,25 @@ input,select{width:100%;padding:12px;border-radius:9px;border:1px solid var(--li
     <p id="recordStatus" class="muted">No recording yet.</p>
     <button id="downloadVideo" disabled>Save video to Files</button>
     <button id="liveAgain" disabled>Return to live preview</button>
+    <div class="guideControls">
+      <strong>Setup guide</strong>
+      <div class="guideToggle">
+        <button id="guideDTL" class="primary" type="button">DTL</button>
+        <button id="guideFace" type="button">Face-On</button>
+      </div>
+      <p id="guideDescription" class="muted">DTL: camera behind you, looking along the target line towards the ball.</p>
+    </div>
+    <button id="mirrorHelp" type="button">Mirror to monitor</button>
+    <div id="mirrorInstructions" class="mirrorInstructions hidden">
+      <strong>Mirror iPad to a monitor</strong>
+      <ol>
+        <li>Connect the iPad and TV/monitor to the same Wi-Fi network.</li>
+        <li>Open Control Centre: swipe down from the top-right corner.</li>
+        <li>Tap Screen Mirroring.</li>
+        <li>Select your AirPlay-compatible TV or Apple TV.</li>
+      </ol>
+      <p>This button shows the steps; Safari websites cannot start AirPlay mirroring directly. For a wired display, use a compatible Lightning-to-HDMI adapter.</p>
+    </div>
     <p class="muted fineprint">Normal-speed recording. Frame rate depends on Safari and iPad hardware.</p>
   </div>
 </div>
@@ -255,6 +387,37 @@ $('save').onclick=()=>{let v=id=>$(id).value.trim();let s={time:new Date().toISO
 $('clear').onclick=()=>{if(confirm('Delete all locally saved shots?')){shots=[];localStorage.setItem(K,'[]');render()}};
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x===b));['practice','camera','insights','history','hardware'].forEach(id=>$(id).classList.toggle('hidden',id!==b.dataset.tab));document.body.classList.toggle('cameraMode',b.dataset.tab==='camera')});
 $('csv').onclick=()=>{let c=['time','club','ball','clubSpeed','launch','carry','total','direction','notes'];let q=x=>'"'+String(x??'').replaceAll('"','""')+'"';let data=[c.join(','),...shots.map(s=>c.map(k=>q(s[k])).join(','))].join('\n');let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'text/csv'}));a.download='shotlytics-shots.csv';a.click();URL.revokeObjectURL(a.href)};
+
+
+// DTL and Face-On positioning guides (illustrative overlays, not body tracking).
+const guideDTL=$('guideDTL'), guideFace=$('guideFace'), swingGuide=$('swingGuide');
+function setGuide(mode){
+  const dtl=mode==='dtl';
+  guideDTL.classList.toggle('primary',dtl);
+  guideFace.classList.toggle('primary',!dtl);
+  $('guideDescription').textContent=dtl
+    ? 'DTL: camera behind you, looking along the target line towards the ball. Keep your full body, club and ball in frame.'
+    : 'Face-On: camera opposite you, looking across your stance. Keep your head, hips, hands, club and ball in frame.';
+  if(dtl){
+    swingGuide.innerHTML=`
+      <g fill="none" stroke="#a5f02f" stroke-width="5" stroke-dasharray="13 10"><path d="M55 430 H745"/><path d="M400 35 V445"/></g>
+      <g stroke="#fff" stroke-width="7" stroke-linejoin="round" fill="#101915" fill-opacity=".45"><circle cx="405" cy="105" r="38"/><path d="M375 145 Q330 160 315 225 L300 310 Q295 340 325 350 L350 270 L355 405 L430 405 L420 265 L455 340 L480 330 L450 220 Q440 160 420 145 Z"/><path d="M355 405 L330 455 L390 455 L405 410 M425 405 L445 455 L505 455 L465 410"/></g>
+      <g fill="#a5f02f" stroke="#111" stroke-width="3"><circle cx="610" cy="430" r="13"/></g>
+      <g fill="#111" fill-opacity=".85" stroke="#a5f02f" stroke-width="3"><rect x="35" y="25" width="220" height="48" rx="12"/><rect x="525" y="350" width="230" height="58" rx="12"/></g>
+      <g fill="#fff" font-family="Arial,sans-serif" font-size="22" font-weight="700"><text x="52" y="56">STAND / ALIGN HERE</text><text x="545" y="375">BALL STARTS HERE</text><text x="545" y="399" font-size="17">Illustrative position guide</text></g>`;
+  }else{
+    swingGuide.innerHTML=`
+      <g fill="none" stroke="#a5f02f" stroke-width="5" stroke-dasharray="13 10"><path d="M55 430 H745"/><path d="M400 35 V445"/></g>
+      <g stroke="#fff" stroke-width="7" stroke-linejoin="round" fill="#101915" fill-opacity=".45"><circle cx="340" cy="95" r="39"/><path d="M300 140 Q270 155 270 220 L275 320 L255 405 L315 405 L340 285 L365 405 L425 405 L395 250 L425 190 Q415 150 380 140 Z"/><path d="M280 190 L225 300 L245 315 L315 225 M395 190 L470 290 L490 278 L420 170"/></g>
+      <g fill="#a5f02f" stroke="#111" stroke-width="3"><circle cx="570" cy="430" r="13"/></g>
+      <g fill="#111" fill-opacity=".85" stroke="#a5f02f" stroke-width="3"><rect x="35" y="25" width="220" height="48" rx="12"/><rect x="485" y="350" width="270" height="58" rx="12"/></g>
+      <g fill="#fff" font-family="Arial,sans-serif" font-size="22" font-weight="700"><text x="52" y="56">FACE-ON VIEW</text><text x="505" y="375">BALL POSITION</text><text x="505" y="399" font-size="17">Opposite your stance</text></g>`;
+  }
+}
+guideDTL.onclick=()=>setGuide('dtl');
+guideFace.onclick=()=>setGuide('face');
+$('mirrorHelp').onclick=()=>$('mirrorInstructions').classList.toggle('hidden');
+setGuide('dtl');
 
 // Camera capture and local video recording
 let cameraStream=null, mediaRecorder=null, recordedChunks=[], videoBlob=null, playbackUrl=null;
