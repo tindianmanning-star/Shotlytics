@@ -129,6 +129,7 @@ async function startCamera(){
       audio:false,
       video:{facingMode:{ideal:$('cameraFacing').value},width:{ideal:w},height:{ideal:h},frameRate:{ideal:fps,max:fps}}
     });
+    liveVideo.pause(); liveVideo.removeAttribute('src'); liveVideo.controls=false; liveVideo.muted=true;
     liveVideo.srcObject=cameraStream;
     await liveVideo.play();
     $('startCamera').disabled=true; $('stopCamera').disabled=false; $('recordVideo').disabled=false;
@@ -178,7 +179,8 @@ $('startCamera').onclick=startCamera;
 $('stopCamera').onclick=stopCamera;
 $('recordVideo').onclick=startRecording;
 $('stopRecording').onclick=stopRecording;
-$('liveAgain').onclick=()=>{if(playbackUrl)URL.revokeObjectURL(playbackUrl);playbackUrl=null;liveVideo.pause();liveVideo.removeAttribute('src');liveVideo.controls=false;liveVideo.muted=true;$('downloadVideo').disabled=true;$('liveAgain').disabled=true;if(cameraStream){liveVideo.srcObject=cameraStream;liveVideo.play().catch(()=>{});}};\n$('downloadVideo').onclick=()=>{
+$('liveAgain').onclick=()=>{if(playbackUrl)URL.revokeObjectURL(playbackUrl);playbackUrl=null;liveVideo.pause();liveVideo.removeAttribute('src');liveVideo.controls=false;liveVideo.muted=true;$('downloadVideo').disabled=true;$('liveAgain').disabled=true;if(cameraStream){liveVideo.srcObject=cameraStream;liveVideo.play().catch(()=>{});}};
+$('downloadVideo').onclick=()=>{
   if(!videoBlob)return;
   const ext=videoBlob.type.includes('mp4')?'mp4':'webm';
   const a=document.createElement('a');a.href=playbackUrl;a.download='shotlytics-swing-'+new Date().toISOString().replace(/[:.]/g,'-')+'.'+ext;
