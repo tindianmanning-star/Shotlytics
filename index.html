@@ -276,12 +276,13 @@ input,select{width:100%;padding:12px;border-radius:9px;border:1px solid var(--li
 .swingGuide{opacity:.92}
 .videoGuideWrap{overflow:hidden;border-radius:10px}
 
+.grid button{width:100%;font-size:13px;padding:10px 5px}.grid .muted{margin:6px 0 0;font-size:11px}
 </style></head><body>
 <header><div class="brand">SHOT<span>LYTICS</span></div><div class="sub">PRACTICE · ANALYSE · IMPROVE</div>
-<nav><button class="active" data-tab="practice">Practice</button><button data-tab="camera">Camera</button><button data-tab="insights">Club insights</button><button data-tab="history">Shot history</button><button data-tab="hardware">Hardware</button></nav></header>
+<nav><button class="active" data-tab="practice">Practice</button><button data-tab="camera">Camera</button><button data-tab="swing">Swing analysis</button><button data-tab="insights">Club insights</button><button data-tab="history">Shot history</button><button data-tab="hardware">Hardware</button></nav></header>
 <main>
 <section id="practice">
-<div class="card"><b>Practice session</b><div class="muted">Version 2 · club-specific averages and shot pattern summary</div></div>
+<div class="card"><b>Practice session</b><div class="muted">V14 · club-specific averages, camera tools and basic swing review</div></div>
 <div class="grid">
 <div class="card metric"><small>Average ball speed</small><strong id="avgBall">—</strong><span class="muted">mph · entered data</span></div>
 <div class="card metric"><small>Average club speed</small><strong id="avgClub">—</strong><span class="muted">mph · entered data</span></div>
@@ -346,6 +347,7 @@ input,select{width:100%;padding:12px;border-radius:9px;border:1px solid var(--li
     <button id="stopRecording" disabled>Stop recording</button>
     <p id="recordStatus" class="muted">No recording yet.</p>
     <button id="downloadVideo" disabled>Save video to Files</button>
+    <button id="analyseRecorded" disabled>Analyse this swing</button>
     <button id="liveAgain" disabled>Return to live preview</button>
     <div class="guideControls">
       <strong>Setup guide</strong>
@@ -370,13 +372,65 @@ input,select{width:100%;padding:12px;border-radius:9px;border:1px solid var(--li
   </div>
 </div>
 </section>
-\n<section id="insights" class="hidden">
+\n
+<section id="swing" class="hidden">
+  <div class="card">
+    <h2>Basic swing review</h2>
+    <p class="muted">Review a recorded swing on this iPad. Load a clip from your latest camera recording or choose a video from Files. ShotLytics V14 provides slow playback, frame stepping and manual swing-phase markers; it does not yet use automatic AI body tracking or measure club/ball data.</p>
+    <label for="swingFile">Choose a swing video from Files</label>
+    <input id="swingFile" type="file" accept="video/*">
+    <p id="swingLoadStatus" class="muted">No analysis clip loaded.</p>
+  </div>
+  <div class="card">
+    <video id="analysisPlayer" class="cameraView" controls playsinline preload="metadata" style="width:100%;height:auto;max-height:55vh;object-fit:contain"></video>
+    <div class="actions">
+      <button id="playPause" class="primary" disabled>Play / pause</button>
+      <button id="slower" disabled>0.25×</button>
+      <button id="normalSpeed" disabled>1× speed</button>
+      <button id="stepBack" disabled>◀ Frame</button>
+      <button id="stepForward" disabled>Frame ▶</button>
+    </div>
+    <label for="swingScrub">Video position</label>
+    <input id="swingScrub" type="range" min="0" max="1000" value="0" disabled>
+    <p id="swingTime" class="muted">00:00.00 / 00:00.00</p>
+  </div>
+  <div class="card">
+    <h2>Mark swing positions</h2>
+    <p class="muted">Pause at each position, then tap the matching marker. These timestamps are your manual review points, not automatically detected events.</p>
+    <div class="grid">
+      <div><button id="markAddress" disabled>Mark address</button><p id="timeAddress" class="muted">Not marked</p></div>
+      <div><button id="markTop" disabled>Mark top</button><p id="timeTop" class="muted">Not marked</p></div>
+      <div><button id="markImpact" disabled>Mark impact</button><p id="timeImpact" class="muted">Not marked</p></div>
+      <div><button id="markFinish" disabled>Mark finish</button><p id="timeFinish" class="muted">Not marked</p></div>
+    </div>
+    <label for="swingNotes">What do you notice?</label>
+    <textarea id="swingNotes" rows="4" style="width:100%;padding:12px;border-radius:9px;border:1px solid var(--line);background:#0e1510;color:var(--w)" placeholder="Example: head moves towards target, hips slide, trail elbow position, balance at finish…"></textarea>
+    <div class="actions">
+      <button id="saveSwingReview" class="primary" disabled>Save swing review</button>
+      <button id="clearSwingMarks" disabled>Clear markers</button>
+    </div>
+    <p id="swingSaveStatus" class="muted">Reviews are saved locally on this iPad, separately from your shot history.</p>
+  </div>
+  <div class="card">
+    <h2>Basic review checklist</h2>
+    <p class="muted">Use these prompts while comparing the address, top, impact and finish frames. They are observation prompts, not automated diagnoses.</p>
+    <ul class="muted">
+      <li><b>Setup:</b> balanced stance, athletic knee flex, hip hinge, arms hanging naturally.</li>
+      <li><b>Top:</b> maintain balance and posture; avoid excessive sway or loss of control.</li>
+      <li><b>Impact:</b> observe whether your head and torso remain controlled and whether your hands are ahead of the ball where appropriate.</li>
+      <li><b>Finish:</b> balanced finish, chest turned towards the target, weight supported on the lead side.</li>
+    </ul>
+    <p class="muted">For a right-handed golfer, use DTL to inspect posture and swing direction, and Face-On to inspect sway, balance and weight shift. Keep the full club and body in frame.</p>
+  </div>
+</section>
+
+<section id="insights" class="hidden">
 <div class="card"><h2>Club averages</h2><p class="muted">Averages are calculated only from values you have entered. Each club needs at least one recorded shot.</p><div class="tablewrap"><table><thead><tr><th>Club</th><th>Shots</th><th>Ball mph</th><th>Club mph</th><th>Carry m</th></tr></thead><tbody id="clubRows"></tbody></table></div></div>
 <div class="card"><h2>Shot direction mix</h2><p class="muted">Count of recorded direction labels. This is a category summary, not a measured landing dispersion plot.</p><div id="directionBars"></div></div>
 </section>
 <section id="history" class="hidden"><div class="card"><div class="sectionhead"><h2>Shot history</h2><button id="csv">Export CSV</button></div><div class="tablewrap"><table><thead><tr><th>Date</th><th>Club</th><th>Ball mph</th><th>Club mph</th><th>Carry m</th><th>Direction</th><th>Notes</th></tr></thead><tbody id="rows"></tbody></table></div></div></section>
 <section id="hardware" class="hidden"><div class="card"><h2>Future ESP32 integration</h2><span class="pill">Not connected · planned</span><p class="muted">Future local Wi-Fi connection for calibrated optical ball-speed sensors and other validated measurement modules. This version does not connect to an ESP32 or E6.</p><ul class="muted"><li>Ball speed: optical timing gates</li><li>Club speed: separate validated sensor or camera analysis</li><li>Launch angle and direction: additional calibrated sensing</li><li>Shot timestamps and club selection</li></ul><p class="muted">Keep exporting CSV backups. Browser-local data can be lost if website data is cleared or a different browser/device is used.</p></div></section>
-</main><footer class="muted" style="text-align:center;padding:10px 15px 25px">ShotLytics v5 · Single-screen camera layout · Local browser storage</footer>
+</main><footer class="muted" style="text-align:center;padding:10px 15px 25px">ShotLytics V14 · Basic on-device swing review · Local browser storage</footer>
 <script>
 const K='shotlytics-shots-v1';let shots=JSON.parse(localStorage.getItem(K)||'[]');const $=x=>document.getElementById(x);
 function avg(a,k){let v=a.map(s=>Number(s[k])).filter(n=>n>0&&Number.isFinite(n));return v.length?(v.reduce((x,y)=>x+y,0)/v.length).toFixed(1):'—'}
@@ -529,7 +583,7 @@ function startRecording(){
       videoBlob=new Blob(recordedChunks,{type});
       if(playbackUrl)URL.revokeObjectURL(playbackUrl);
       playbackUrl=URL.createObjectURL(videoBlob); liveVideo.srcObject=null;liveVideo.src=playbackUrl;liveVideo.controls=true;liveVideo.muted=false;liveVideo.play().catch(()=>{});$('liveAgain').disabled=false;
-      $('downloadVideo').disabled=false;
+      $('downloadVideo').disabled=false; $('analyseRecorded').disabled=false;
       $('recordStatus').textContent='Recording ready · '+(videoBlob.size/1024/1024).toFixed(1)+' MB. Preview it, then save it to Files.';
     };
     mediaRecorder.start();
@@ -555,6 +609,84 @@ $('downloadVideo').onclick=()=>{
   $('recordStatus').textContent='Video download started. On iPad, check Safari Downloads or the Files app.';
 };
 window.addEventListener('pagehide',()=>{if(cameraStream)cameraStream.getTracks().forEach(t=>t.stop());if(playbackUrl)URL.revokeObjectURL(playbackUrl);});
+
+
+// V14 basic on-device swing review. Video is processed locally in the browser.
+const analysisPlayer=$('analysisPlayer');
+let analysisUrl=null, analysisFileName='', swingMarks={address:null,top:null,impact:null,finish:null};
+const reviewKey='shotlytics-swing-analysis-v1';
+function fmtTime(t){
+  if(!Number.isFinite(t)) return '00:00.00';
+  const m=Math.floor(t/60), s=t-m*60;
+  return String(m).padStart(2,'0')+':'+s.toFixed(2).padStart(5,'0');
+}
+function setReviewEnabled(on){
+  ['playPause','slower','normalSpeed','stepBack','stepForward','swingScrub',
+   'markAddress','markTop','markImpact','markFinish','saveSwingReview','clearSwingMarks']
+   .forEach(id=>$(id).disabled=!on);
+}
+function showMark(name){
+  $('time'+name[0].toUpperCase()+name.slice(1)).textContent=
+    swingMarks[name]===null?'Not marked':fmtTime(swingMarks[name]);
+}
+function loadAnalysisClip(file, url){
+  if(analysisUrl) URL.revokeObjectURL(analysisUrl);
+  analysisUrl=url; analysisFileName=file||'Camera recording';
+  analysisPlayer.pause(); analysisPlayer.src=url; analysisPlayer.load();
+  $('swingLoadStatus').textContent='Loaded locally: '+analysisFileName;
+  swingMarks={address:null,top:null,impact:null,finish:null};
+  Object.keys(swingMarks).forEach(showMark);
+  $('swingNotes').value='';
+  setReviewEnabled(false);
+}
+$('swingFile').addEventListener('change',e=>{
+  const file=e.target.files && e.target.files[0];
+  if(file) loadAnalysisClip(file.name,URL.createObjectURL(file));
+});
+$('analyseRecorded').onclick=()=>{
+  if(!videoBlob)return;
+  const fileName='Latest ShotLytics camera recording';
+  loadAnalysisClip(fileName,URL.createObjectURL(videoBlob));
+  document.querySelector('[data-tab="swing"]').click();
+};
+analysisPlayer.addEventListener('loadedmetadata',()=>{
+  setReviewEnabled(true);
+  $('swingScrub').max=1000;
+  updateSwingTime();
+});
+function updateSwingTime(){
+  const d=analysisPlayer.duration||0, t=analysisPlayer.currentTime||0;
+  $('swingTime').textContent=fmtTime(t)+' / '+fmtTime(d);
+  $('swingScrub').value=d?Math.round(t/d*1000):0;
+}
+analysisPlayer.addEventListener('timeupdate',updateSwingTime);
+analysisPlayer.addEventListener('durationchange',updateSwingTime);
+$('playPause').onclick=()=>{if(analysisPlayer.paused)analysisPlayer.play().catch(()=>{});else analysisPlayer.pause();};
+$('slower').onclick=()=>{analysisPlayer.playbackRate=.25;};
+$('normalSpeed').onclick=()=>{analysisPlayer.playbackRate=1;};
+function stepFrame(direction){
+  analysisPlayer.pause();
+  // Approximate 30 fps frame step; actual recorded frame rate can vary by device/browser.
+  analysisPlayer.currentTime=Math.max(0,Math.min(analysisPlayer.duration||0,analysisPlayer.currentTime+direction/30));
+}
+$('stepBack').onclick=()=>stepFrame(-1);
+$('stepForward').onclick=()=>stepFrame(1);
+$('swingScrub').addEventListener('input',()=>{
+  if(analysisPlayer.duration)analysisPlayer.currentTime=analysisPlayer.duration*(Number($('swingScrub').value)/1000);
+});
+[['address','markAddress'],['top','markTop'],['impact','markImpact'],['finish','markFinish']].forEach(([name,id])=>{
+  $(id).onclick=()=>{swingMarks[name]=analysisPlayer.currentTime;showMark(name);};
+});
+$('clearSwingMarks').onclick=()=>{
+  swingMarks={address:null,top:null,impact:null,finish:null};
+  Object.keys(swingMarks).forEach(showMark);
+};
+$('saveSwingReview').onclick=()=>{
+  const records=JSON.parse(localStorage.getItem(reviewKey)||'[]');
+  records.push({time:new Date().toISOString(),file:analysisFileName,marks:{...swingMarks},notes:$('swingNotes').value});
+  localStorage.setItem(reviewKey,JSON.stringify(records));
+  $('swingSaveStatus').textContent='Swing review saved on this iPad · '+records.length+' review(s) stored. Video files are not stored in the review record.';
+};
 
 if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});render();
 </script></body></html>
