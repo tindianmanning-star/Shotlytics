@@ -166,5 +166,6 @@ $('downloadVideo').onclick=()=>{
   $('recordStatus').textContent='Video download started. On iPad, check Safari Downloads or the Files app.';
 };
 window.addEventListener('pagehide',()=>{if(cameraStream)cameraStream.getTracks().forEach(t=>t.stop());if(playbackUrl)URL.revokeObjectURL(playbackUrl);});
-\nif('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});render();
+
+if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});render();
 </script></body></html>
