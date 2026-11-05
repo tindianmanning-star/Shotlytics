@@ -48,19 +48,19 @@ input,select{width:100%;padding:12px;border-radius:9px;border:1px solid var(--li
   <div class="cameraControls">
     <button class="primary" id="startCamera">Start camera</button>
     <button id="stopCamera" disabled>Stop camera</button>
+    <button class="primary" id="recordVideo" disabled>● Record swing</button>
+    <button id="stopRecording" disabled>Stop recording</button>
   </div>
   <div class="form" style="margin-top:8px">
     <div><label>Camera quality</label><select id="cameraQuality"><option value="1280,720,30">720p · 30 fps (recommended)</option><option value="1920,1080,30">1080p · 30 fps</option><option value="640,480,30">480p · 30 fps</option></select></div>
     <div><label>Camera</label><select id="cameraFacing"><option value="environment">Rear camera</option><option value="user">Front camera</option></select></div>
   </div>
-  <p id="cameraStatus" class="muted">Camera is off. Camera access requires HTTPS and your permission.</p>
+  <p id="cameraStatus" class="muted">Camera is off. Camera access requires HTTPS and your permission.</p>\n  <p id="recordStatus" class="muted">Ready to record when the camera is on.</p>
 </div>
 <div class="card">
   <h2>Record a swing</h2>
   <p class="muted">Record a normal-speed clip, then replay it. Available recording formats and frame rates depend on Safari and the iPad. This does not guarantee 120/240 fps slow-motion capture.</p>
   <div class="cameraControls">
-    <button class="primary" id="recordVideo" disabled>Start recording</button>
-    <button id="stopRecording" disabled>Stop recording</button>
     <button id="downloadVideo" disabled>Save video to Files</button>
   </div>
   <video id="playbackVideo" class="cameraView" controls playsinline></video>
