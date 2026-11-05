@@ -14,7 +14,25 @@ h2{font-size:17px;margin:0 0 10px}label{display:block;color:var(--muted);font-si
 input,select{width:100%;padding:12px;border-radius:9px;border:1px solid var(--line);background:#0e1510;color:var(--w)}
 .form{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
 .hidden{display:none!important}.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:13px}td,th{text-align:left;padding:9px 6px;border-bottom:1px solid var(--line);white-space:nowrap}th{color:var(--muted)}
-.pill{font-size:11px;color:var(--muted);border:1px solid var(--line);padding:5px 9px;border-radius:99px}.barrow{display:grid;grid-template-columns:85px 1fr 55px;gap:8px;align-items:center;margin:10px 0;font-size:12px}.bar{height:10px;border-radius:20px;background:#29352d;overflow:hidden}.bar i{display:block;height:100%;background:var(--lime);border-radius:20px}.sectionhead{display:flex;justify-content:space-between;align-items:center;gap:8px}\n.cameraView{width:100%;aspect-ratio:16/9;background:#050806;border-radius:12px;object-fit:contain;border:1px solid var(--line)}.cameraControls{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.cameraControls button{flex:1;min-width:125px}.recordingDot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#ef4444;margin-right:6px}
+.pill{font-size:11px;color:var(--muted);border:1px solid var(--line);padding:5px 9px;border-radius:99px}.barrow{display:grid;grid-template-columns:85px 1fr 55px;gap:8px;align-items:center;margin:10px 0;font-size:12px}.bar{height:10px;border-radius:20px;background:#29352d;overflow:hidden}.bar i{display:block;height:100%;background:var(--lime);border-radius:20px}.sectionhead{display:flex;justify-content:space-between;align-items:center;gap:8px}\n.cameraView{width:100%;height:auto;aspect-ratio:16/9;max-height:56vh;background:#050806;border-radius:12px;object-fit:contain;border:1px solid var(--line)}
+.cameraControls{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.cameraControls button{flex:1;min-width:120px}
+.recordingDot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#ef4444;margin-right:6px}
+.cameraLayout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(260px,.85fr);gap:14px;align-items:start}
+.cameraSide{display:flex;flex-direction:column;gap:10px}.cameraSide .form{grid-template-columns:1fr}
+.cameraSide label{margin:5px 0 4px}.cameraSide .muted{margin:6px 0}
+.cameraMode header{padding:7px 14px}.cameraMode .brand{font-size:20px}.cameraMode .sub{font-size:10px}.cameraMode nav{margin-top:5px;gap:6px}.cameraMode nav button{padding:7px 10px;font-size:13px}
+.cameraMode main{max-width:1250px;padding:8px 12px}.cameraMode .card{padding:10px;margin:0}
+.cameraMode #camera{height:calc(100svh - 95px)}
+.cameraMode #camera>.card{height:100%}
+.cameraMode .cameraLayout{height:100%;grid-template-columns:minmax(0,1.5fr) minmax(270px,.8fr)}
+.cameraMode .cameraView{height:calc(100% - 4px);max-height:calc(100svh - 145px);aspect-ratio:auto;min-height:0}
+.cameraMode .cameraSide{height:100%;justify-content:flex-start;overflow:auto}
+.cameraMode .cameraSide h2{margin-bottom:4px}
+.cameraMode .cameraSide .muted{font-size:12px;line-height:1.3}
+.cameraMode footer{display:none}
+@media(max-width:700px){.cameraLayout{grid-template-columns:1fr}.cameraMode #camera{height:auto}.cameraMode #camera>.card{height:auto}.cameraMode .cameraLayout{height:auto}.cameraMode .cameraView{height:auto;max-height:38vh;aspect-ratio:16/9}.cameraMode .cameraSide{overflow:visible}.cameraMode footer{display:block}}
+@media(min-width:701px) and (orientation:landscape){body.cameraMode{overflow:hidden}}
+
 @media(max-width:600px){.grid{grid-template-columns:repeat(2,1fr)}.metric:last-child{grid-column:span 2}.form{grid-template-columns:1fr}}
 </style></head><body>
 <header><div class="brand">SHOT<span>LYTICS</span></div><div class="sub">PRACTICE · ANALYSE · IMPROVE</div>
@@ -42,34 +60,36 @@ input,select{width:100%;padding:12px;border-radius:9px;border:1px solid var(--li
 
 <section id="camera" class="hidden">
 <div class="card">
-  <h2>iPad swing camera</h2>
-  <p class="muted">Place the iPad safely to the side or behind the hitting area, outside the ball's path. Tap Start camera and allow camera access when Safari asks.</p>
-  <video id="liveVideo" class="cameraView" autoplay muted playsinline></video>
-  <div class="cameraControls">
-    <button class="primary" id="startCamera">Start camera</button>
-    <button id="stopCamera" disabled>Stop camera</button>
-    <button class="primary" id="recordVideo" disabled>● Record swing</button>
-    <button id="stopRecording" disabled>Stop recording</button>
+  <div class="cameraLayout">
+    <div>
+      <video id="liveVideo" class="cameraView" autoplay muted playsinline></video>
+    </div>
+    <div class="cameraSide">
+      <div>
+        <h2>iPad swing camera</h2>
+        <p class="muted">Position the iPad safely outside the ball's path. Use landscape orientation for the best one-screen layout.</p>
+      </div>
+      <div class="cameraControls">
+        <button class="primary" id="startCamera">Start camera</button>
+        <button id="stopCamera" disabled>Stop camera</button>
+      </div>
+      <div class="form">
+        <div><label>Camera quality</label><select id="cameraQuality"><option value="1280,720,30">720p · 30 fps</option><option value="1920,1080,30">1080p · 30 fps</option><option value="640,480,30">480p · 30 fps</option></select></div>
+        <div><label>Camera</label><select id="cameraFacing"><option value="environment">Rear camera</option><option value="user">Front camera</option></select></div>
+      </div>
+      <p id="cameraStatus" class="muted">Camera is off. Allow camera access when Safari asks.</p>
+      <div class="cameraControls">
+        <button class="primary" id="recordVideo" disabled>● Record swing</button>
+        <button id="stopRecording" disabled>Stop recording</button>
+      </div>
+      <p id="recordStatus" class="muted">Ready to record when the camera is on.</p>
+      <div class="cameraControls">
+        <button id="downloadVideo" disabled>Save video to Files</button>
+        <button id="liveAgain" disabled>Return to live camera</button>
+      </div>
+      <p class="muted">Recording is normal-speed video; actual resolution and frame rate depend on Safari and the iPad. This does not calculate ball speed or spin.</p>
+    </div>
   </div>
-  <div class="form" style="margin-top:8px">
-    <div><label>Camera quality</label><select id="cameraQuality"><option value="1280,720,30">720p · 30 fps (recommended)</option><option value="1920,1080,30">1080p · 30 fps</option><option value="640,480,30">480p · 30 fps</option></select></div>
-    <div><label>Camera</label><select id="cameraFacing"><option value="environment">Rear camera</option><option value="user">Front camera</option></select></div>
-  </div>
-  <p id="cameraStatus" class="muted">Camera is off. Camera access requires HTTPS and your permission.</p>\n  <p id="recordStatus" class="muted">Ready to record when the camera is on.</p>
-</div>
-<div class="card">
-  <h2>Record a swing</h2>
-  <p class="muted">Record a normal-speed clip, then replay it. Available recording formats and frame rates depend on Safari and the iPad. This does not guarantee 120/240 fps slow-motion capture.</p>
-  <div class="cameraControls">
-    <button id="downloadVideo" disabled>Save video to Files</button>
-  </div>
-  <video id="playbackVideo" class="cameraView" controls playsinline></video>
-  <p id="recordStatus" class="muted">No recording yet.</p>
-</div>
-<div class="card">
-  <h2>Recommended camera position</h2>
-  <p class="muted">For swing mechanics, start with a face-on view: camera around hand height, level, far enough back to show your full body and club. Then record a separate down-the-line view. Keep the iPad and tripod well outside the ball's flight and rebound zone.</p>
-  <p class="muted">The camera records video only. It does not yet calculate ball speed, spin, launch angle or carry.</p>
 </div>
 </section>
 \n<section id="insights" class="hidden">
@@ -78,7 +98,7 @@ input,select{width:100%;padding:12px;border-radius:9px;border:1px solid var(--li
 </section>
 <section id="history" class="hidden"><div class="card"><div class="sectionhead"><h2>Shot history</h2><button id="csv">Export CSV</button></div><div class="tablewrap"><table><thead><tr><th>Date</th><th>Club</th><th>Ball mph</th><th>Club mph</th><th>Carry m</th><th>Direction</th><th>Notes</th></tr></thead><tbody id="rows"></tbody></table></div></div></section>
 <section id="hardware" class="hidden"><div class="card"><h2>Future ESP32 integration</h2><span class="pill">Not connected · planned</span><p class="muted">Future local Wi-Fi connection for calibrated optical ball-speed sensors and other validated measurement modules. This version does not connect to an ESP32 or E6.</p><ul class="muted"><li>Ball speed: optical timing gates</li><li>Club speed: separate validated sensor or camera analysis</li><li>Launch angle and direction: additional calibrated sensing</li><li>Shot timestamps and club selection</li></ul><p class="muted">Keep exporting CSV backups. Browser-local data can be lost if website data is cleared or a different browser/device is used.</p></div></section>
-</main><footer class="muted" style="text-align:center;padding:10px 15px 25px">ShotLytics v3 · Camera recording · Local browser storage</footer>
+</main><footer class="muted" style="text-align:center;padding:10px 15px 25px">ShotLytics v5 · Single-screen camera layout · Local browser storage</footer>
 <script>
 const K='shotlytics-shots-v1';let shots=JSON.parse(localStorage.getItem(K)||'[]');const $=x=>document.getElementById(x);
 function avg(a,k){let v=a.map(s=>Number(s[k])).filter(n=>n>0&&Number.isFinite(n));return v.length?(v.reduce((x,y)=>x+y,0)/v.length).toFixed(1):'—'}
@@ -92,12 +112,12 @@ function render(){
 }
 $('save').onclick=()=>{let v=id=>$(id).value.trim();let s={time:new Date().toISOString(),club:v('club'),ball:v('ball'),clubSpeed:v('clubSpeed'),launch:v('launch'),carry:v('carry'),total:v('total'),direction:v('direction'),notes:v('notes')};if(![s.ball,s.clubSpeed,s.launch,s.carry,s.total,s.notes,s.direction].some(Boolean)){$('msg').textContent='Enter at least one reading or note.';return}shots.push(s);localStorage.setItem(K,JSON.stringify(shots));render();['ball','clubSpeed','launch','carry','total','direction','notes'].forEach(id=>$(id).value='');$('msg').textContent='Shot saved on this iPad.'};
 $('clear').onclick=()=>{if(confirm('Delete all locally saved shots?')){shots=[];localStorage.setItem(K,'[]');render()}};
-document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x===b));['practice','camera','insights','history','hardware'].forEach(id=>$(id).classList.toggle('hidden',id!==b.dataset.tab))});
+document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x===b));['practice','camera','insights','history','hardware'].forEach(id=>$(id).classList.toggle('hidden',id!==b.dataset.tab));document.body.classList.toggle('cameraMode',b.dataset.tab==='camera')});
 $('csv').onclick=()=>{let c=['time','club','ball','clubSpeed','launch','carry','total','direction','notes'];let q=x=>'"'+String(x??'').replaceAll('"','""')+'"';let data=[c.join(','),...shots.map(s=>c.map(k=>q(s[k])).join(','))].join('\n');let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'text/csv'}));a.download='shotlytics-shots.csv';a.click();URL.revokeObjectURL(a.href)};
 
 // Camera capture and local video recording
 let cameraStream=null, mediaRecorder=null, recordedChunks=[], videoBlob=null, playbackUrl=null;
-const liveVideo=$('liveVideo'), playbackVideo=$('playbackVideo');
+const liveVideo=$('liveVideo');
 async function startCamera(){
   if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
     $('cameraStatus').textContent='Camera access is unavailable in this browser. Open the HTTPS GitHub Pages site in Safari and try again.'; return;
@@ -140,7 +160,7 @@ function startRecording(){
       const type=mediaRecorder.mimeType||'video/mp4';
       videoBlob=new Blob(recordedChunks,{type});
       if(playbackUrl)URL.revokeObjectURL(playbackUrl);
-      playbackUrl=URL.createObjectURL(videoBlob); playbackVideo.src=playbackUrl;
+      playbackUrl=URL.createObjectURL(videoBlob); liveVideo.srcObject=null;liveVideo.src=playbackUrl;liveVideo.controls=true;liveVideo.muted=false;liveVideo.play().catch(()=>{});$('liveAgain').disabled=false;
       $('downloadVideo').disabled=false;
       $('recordStatus').textContent='Recording ready · '+(videoBlob.size/1024/1024).toFixed(1)+' MB. Preview it, then save it to Files.';
     };
@@ -158,7 +178,7 @@ $('startCamera').onclick=startCamera;
 $('stopCamera').onclick=stopCamera;
 $('recordVideo').onclick=startRecording;
 $('stopRecording').onclick=stopRecording;
-$('downloadVideo').onclick=()=>{
+$('liveAgain').onclick=()=>{if(playbackUrl)URL.revokeObjectURL(playbackUrl);playbackUrl=null;liveVideo.pause();liveVideo.removeAttribute('src');liveVideo.controls=false;liveVideo.muted=true;$('downloadVideo').disabled=true;$('liveAgain').disabled=true;if(cameraStream){liveVideo.srcObject=cameraStream;liveVideo.play().catch(()=>{});}};\n$('downloadVideo').onclick=()=>{
   if(!videoBlob)return;
   const ext=videoBlob.type.includes('mp4')?'mp4':'webm';
   const a=document.createElement('a');a.href=playbackUrl;a.download='shotlytics-swing-'+new Date().toISOString().replace(/[:.]/g,'-')+'.'+ext;
