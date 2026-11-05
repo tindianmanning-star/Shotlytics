@@ -277,12 +277,35 @@ input,select{width:100%;padding:12px;border-radius:9px;border:1px solid var(--li
 .videoGuideWrap{overflow:hidden;border-radius:10px}
 
 .grid button{width:100%;font-size:13px;padding:10px 5px}.grid .muted{margin:6px 0 0;font-size:11px}
+
+/* V16: floating camera control dock */
+.camera-reference-layout{position:relative;display:block!important;padding:0!important;min-height:0!important;height:auto!important}
+.cameraPreviewPane{display:block!important;width:100%;height:auto!important;min-height:0!important;padding:0!important}
+.cameraPreviewPane .videoGuideWrap{position:relative;width:100%;height:clamp(300px,68svh,720px);min-height:300px;background:#050806;border-radius:12px;overflow:hidden}
+.cameraPreviewPane .cameraView{width:100%!important;height:100%!important;max-height:none!important;min-height:0!important;aspect-ratio:auto!important;object-fit:contain!important}
+.cameraPreviewPane .swingGuide{width:100%;height:100%;inset:0}
+.cameraSettings{display:none!important}
+.cameraSide{position:absolute!important;z-index:5;right:14px;bottom:14px;width:min(290px,42%)!important;max-height:calc(100% - 28px);overflow:auto!important;padding:12px!important;border:1px solid rgba(190,220,190,.45);border-radius:14px;background:rgba(9,17,13,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 8px 30px rgba(0,0,0,.5);gap:7px!important}
+.cameraSide h2{font-size:15px!important}
+.cameraSide button{min-height:34px!important;font-size:12px!important;padding:7px 8px!important}
+.cameraSide .muted{font-size:10px!important}
+.cameraSide .cameraActionGap{height:1px;flex-basis:1px}
+.cameraSide .guideControls{padding:7px}
+@media(orientation:portrait){
+ .cameraPreviewPane .videoGuideWrap{height:clamp(430px,72svh,760px)}
+ .cameraSide{right:9px;bottom:9px;width:min(260px,48%)!important;max-height:72%;padding:9px!important}
+ .cameraSide button{min-height:32px!important;font-size:11px!important}
+}
+@media(max-width:600px){
+ .cameraSide{width:min(230px,54%)!important;right:7px;bottom:7px}
+}
+
 </style></head><body>
 <header><div class="brand">SHOT<span>LYTICS</span></div><div class="sub">PRACTICE · ANALYSE · IMPROVE</div>
-<nav><button class="active" data-tab="practice">Practice</button><button data-tab="camera">Camera</button><button data-tab="swing">Swing analysis</button><button data-tab="insights">Club insights</button><button data-tab="history">Shot history</button><button data-tab="hardware">Hardware</button></nav></header>
+<nav><button class="active" data-tab="practice">Practice</button><button data-tab="camera">Camera</button><button data-tab="openvideo">Open video</button><button data-tab="analysevideo">Analyse video</button><button data-tab="insights">Club insights</button><button data-tab="history">Shot history</button><button data-tab="hardware">Hardware</button></nav></header>
 <main>
 <section id="practice">
-<div class="card"><b>Practice session</b><div class="muted">V14 · club-specific averages, camera tools and basic swing review</div></div>
+<div class="card"><b>Practice session</b><div class="muted">V16 · camera tools, video review and shot history</div></div>
 <div class="grid">
 <div class="card metric"><small>Average ball speed</small><strong id="avgBall">—</strong><span class="muted">mph · entered data</span></div>
 <div class="card metric"><small>Average club speed</small><strong id="avgClub">—</strong><span class="muted">mph · entered data</span></div>
@@ -373,13 +396,21 @@ input,select{width:100%;padding:12px;border-radius:9px;border:1px solid var(--li
 </div>
 </section>
 \n
-<section id="swing" class="hidden">
+<section id="openvideo" class="hidden">
   <div class="card">
-    <h2>Basic swing review</h2>
-    <p class="muted">Review a recorded swing on this iPad. Load a clip from your latest camera recording or choose a video from Files. ShotLytics V14 provides slow playback, frame stepping and manual swing-phase markers; it does not yet use automatic AI body tracking or measure club/ball data.</p>
-    <label for="swingFile">Choose a swing video from Files</label>
+    <h2>Open a swing video</h2>
+    <p class="muted">Choose a video saved on this iPad. The clip stays on this device and is loaded locally in Safari.</p>
+    <label for="swingFile">Choose video from Files</label>
     <input id="swingFile" type="file" accept="video/*">
-    <p id="swingLoadStatus" class="muted">No analysis clip loaded.</p>
+    <p id="swingLoadStatus" class="muted">No video selected yet.</p>
+    <button id="openInAnalysis" class="primary" disabled>Open in Analyse video</button>
+  </div>
+</section>
+
+<section id="analysevideo" class="hidden">
+  <div class="card">
+    <h2>Analyse video</h2>
+    <p class="muted">Review on this iPad with slow playback, frame stepping and manual swing-phase markers. This is a manual review tool, not automatic AI body tracking or launch measurement.</p>
   </div>
   <div class="card">
     <video id="analysisPlayer" class="cameraView" controls playsinline preload="metadata" style="width:100%;height:auto;max-height:55vh;object-fit:contain"></video>
@@ -430,7 +461,7 @@ input,select{width:100%;padding:12px;border-radius:9px;border:1px solid var(--li
 </section>
 <section id="history" class="hidden"><div class="card"><div class="sectionhead"><h2>Shot history</h2><button id="csv">Export CSV</button></div><div class="tablewrap"><table><thead><tr><th>Date</th><th>Club</th><th>Ball mph</th><th>Club mph</th><th>Carry m</th><th>Direction</th><th>Notes</th></tr></thead><tbody id="rows"></tbody></table></div></div></section>
 <section id="hardware" class="hidden"><div class="card"><h2>Future ESP32 integration</h2><span class="pill">Not connected · planned</span><p class="muted">Future local Wi-Fi connection for calibrated optical ball-speed sensors and other validated measurement modules. This version does not connect to an ESP32 or E6.</p><ul class="muted"><li>Ball speed: optical timing gates</li><li>Club speed: separate validated sensor or camera analysis</li><li>Launch angle and direction: additional calibrated sensing</li><li>Shot timestamps and club selection</li></ul><p class="muted">Keep exporting CSV backups. Browser-local data can be lost if website data is cleared or a different browser/device is used.</p></div></section>
-</main><footer class="muted" style="text-align:center;padding:10px 15px 25px">ShotLytics V14 · Basic on-device swing review · Local browser storage</footer>
+</main><footer class="muted" style="text-align:center;padding:10px 15px 25px">ShotLytics V16 · Floating camera controls · Open and analyse video · Local browser storage</footer>
 <script>
 const K='shotlytics-shots-v1';let shots=JSON.parse(localStorage.getItem(K)||'[]');const $=x=>document.getElementById(x);
 function avg(a,k){let v=a.map(s=>Number(s[k])).filter(n=>n>0&&Number.isFinite(n));return v.length?(v.reduce((x,y)=>x+y,0)/v.length).toFixed(1):'—'}
@@ -444,7 +475,7 @@ function render(){
 }
 $('save').onclick=()=>{let v=id=>$(id).value.trim();let s={time:new Date().toISOString(),club:v('club'),ball:v('ball'),clubSpeed:v('clubSpeed'),launch:v('launch'),carry:v('carry'),total:v('total'),direction:v('direction'),notes:v('notes')};if(![s.ball,s.clubSpeed,s.launch,s.carry,s.total,s.notes,s.direction].some(Boolean)){$('msg').textContent='Enter at least one reading or note.';return}shots.push(s);localStorage.setItem(K,JSON.stringify(shots));render();['ball','clubSpeed','launch','carry','total','direction','notes'].forEach(id=>$(id).value='');$('msg').textContent='Shot saved on this iPad.'};
 $('clear').onclick=()=>{if(confirm('Delete all locally saved shots?')){shots=[];localStorage.setItem(K,'[]');render()}};
-document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x===b));['practice','camera','insights','history','hardware'].forEach(id=>$(id).classList.toggle('hidden',id!==b.dataset.tab));document.body.classList.toggle('cameraMode',b.dataset.tab==='camera')});
+document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x===b));['practice','camera','openvideo','analysevideo','insights','history','hardware'].forEach(id=>$(id).classList.toggle('hidden',id!==b.dataset.tab));document.body.classList.toggle('cameraMode',b.dataset.tab==='camera')});
 $('csv').onclick=()=>{let c=['time','club','ball','clubSpeed','launch','carry','total','direction','notes'];let q=x=>'"'+String(x??'').replaceAll('"','""')+'"';let data=[c.join(','),...shots.map(s=>c.map(k=>q(s[k])).join(','))].join('\n');let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'text/csv'}));a.download='shotlytics-shots.csv';a.click();URL.revokeObjectURL(a.href)};
 
 
@@ -641,13 +672,14 @@ function loadAnalysisClip(file, url){
 }
 $('swingFile').addEventListener('change',e=>{
   const file=e.target.files && e.target.files[0];
-  if(file) loadAnalysisClip(file.name,URL.createObjectURL(file));
+  if(file){loadAnalysisClip(file.name,URL.createObjectURL(file));$('openInAnalysis').disabled=false;}
 });
+$('openInAnalysis').onclick=()=>document.querySelector('[data-tab="analysevideo"]').click();
 $('analyseRecorded').onclick=()=>{
   if(!videoBlob)return;
   const fileName='Latest ShotLytics camera recording';
   loadAnalysisClip(fileName,URL.createObjectURL(videoBlob));
-  document.querySelector('[data-tab="swing"]').click();
+  document.querySelector('[data-tab="analysevideo"]').click();
 };
 analysisPlayer.addEventListener('loadedmetadata',()=>{
   setReviewEnabled(true);
