@@ -262,7 +262,7 @@ input,select{width:100%;padding:12px;border-radius:9px;border:1px solid var(--li
 
 .videoGuideWrap{position:relative;width:100%;min-width:0}
 .videoGuideWrap .cameraView{display:block}
-.swingGuide{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.swingGuide{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center;opacity:.5;pointer-events:none}
 .guideControls{border:1px solid var(--line);border-radius:10px;padding:8px;display:grid;gap:6px}
 .guideToggle{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .guideToggle button{min-height:34px;padding:6px}
@@ -273,7 +273,7 @@ input,select{width:100%;padding:12px;border-radius:9px;border:1px solid var(--li
 
 
 /* V13: right-handed address-position guide */
-.swingGuide{opacity:.92}
+.swingGuide{opacity:.5}
 .videoGuideWrap{overflow:hidden;border-radius:10px}
 
 .grid button{width:100%;font-size:13px;padding:10px 5px}.grid .muted{margin:6px 0 0;font-size:11px}
@@ -336,30 +336,7 @@ input,select{width:100%;padding:12px;border-radius:9px;border:1px solid var(--li
   <div class="cameraPreviewPane">
     <div class="videoGuideWrap">
       <video id="liveVideo" class="cameraView" autoplay muted playsinline></video>
-      <svg id="swingGuide" class="swingGuide" viewBox="0 0 800 520" preserveAspectRatio="none" aria-label="Golfer stance and ball position guide">
-        <g fill="none" stroke="#a5f02f" stroke-width="5" stroke-dasharray="13 10" opacity=".95">
-          <path d="M55 430 H745"/>
-          <path d="M400 35 V445"/>
-        </g>
-        <g stroke="#fff" stroke-width="7" stroke-linejoin="round" fill="#101915" fill-opacity=".45">
-          <circle cx="405" cy="105" r="38"/>
-          <path d="M375 145 Q330 160 315 225 L300 310 Q295 340 325 350 L350 270 L355 405 L430 405 L420 265 L455 340 L480 330 L450 220 Q440 160 420 145 Z"/>
-          <path d="M355 405 L330 455 L390 455 L405 410 M425 405 L445 455 L505 455 L465 410"/>
-        </g>
-        <g fill="#a5f02f" stroke="#111" stroke-width="3">
-          <circle cx="610" cy="430" r="13"/>
-          <path d="M610 410 L610 380 M600 392 L610 380 L620 392" fill="none" stroke="#a5f02f" stroke-width="5"/>
-        </g>
-        <g fill="#111" fill-opacity=".85" stroke="#a5f02f" stroke-width="3">
-          <rect x="35" y="25" width="220" height="48" rx="12"/>
-          <rect x="525" y="350" width="230" height="58" rx="12"/>
-        </g>
-        <g fill="#fff" font-family="Arial,sans-serif" font-size="22" font-weight="700">
-          <text x="52" y="56">STAND / ALIGN HERE</text>
-          <text x="545" y="375">BALL STARTS HERE</text>
-          <text x="545" y="399" font-size="17">Illustrative position guide</text>
-        </g>
-      </svg>
+      <img id="swingGuide" class="swingGuide" src="./golfer_dtl.png" alt="Semi-transparent right-handed DTL golfer position overlay">
     </div>
     <div class="cameraSettings">
       <div><label>Camera quality</label><select id="cameraQuality"><option value="1280,720,30">720p · 30 fps (recommended)</option><option value="1920,1080,30">1080p · 30 fps</option><option value="640,480,30">480p · 30 fps</option></select></div>
@@ -549,7 +526,7 @@ input,select{width:100%;padding:12px;border-radius:9px;border:1px solid var(--li
 </section>
 <section id="history" class="hidden"><div class="card"><div class="sectionhead"><h2>Shot history</h2><button id="csv">Export CSV</button></div><div class="tablewrap"><table><thead><tr><th>Date</th><th>Club</th><th>Ball mph</th><th>Club mph</th><th>Carry m</th><th>Direction</th><th>Notes</th></tr></thead><tbody id="rows"></tbody></table></div></div></section>
 <section id="hardware" class="hidden"><div class="card"><h2>Future ESP32 integration</h2><span class="pill">Not connected · planned</span><p class="muted">Future local Wi-Fi connection for calibrated optical ball-speed sensors and other validated measurement modules. This version does not connect to an ESP32 or E6.</p><ul class="muted"><li>Ball speed: optical timing gates</li><li>Club speed: separate validated sensor or camera analysis</li><li>Launch angle and direction: additional calibrated sensing</li><li>Shot timestamps and club selection</li></ul><p class="muted">Keep exporting CSV backups. Browser-local data can be lost if website data is cleared or a different browser/device is used.</p></div></section>
-</main><footer class="muted" style="text-align:center;padding:10px 15px 25px">ShotLytics V19 · Integrated Analyze.Golf workspace · 18Birdies archive · Local browser storage</footer>
+</main><footer class="muted" style="text-align:center;padding:10px 15px 25px">ShotLytics V20 · Correct golfer silhouette overlays · Analyze.Golf workspace · Local browser storage</footer>
 <script>
 const K='shotlytics-shots-v1';let shots=JSON.parse(localStorage.getItem(K)||'[]');const $=x=>document.getElementById(x);
 function avg(a,k){let v=a.map(s=>Number(s[k])).filter(n=>n>0&&Number.isFinite(n));return v.length?(v.reduce((x,y)=>x+y,0)/v.length).toFixed(1):'—'}
@@ -567,88 +544,19 @@ document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{document.query
 $('csv').onclick=()=>{let c=['time','club','ball','clubSpeed','launch','carry','total','direction','notes'];let q=x=>'"'+String(x??'').replaceAll('"','""')+'"';let data=[c.join(','),...shots.map(s=>c.map(k=>q(s[k])).join(','))].join('\n');let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'text/csv'}));a.download='shotlytics-shots.csv';a.click();URL.revokeObjectURL(a.href)};
 
 
-// DTL and Face-On positioning guides (illustrative overlays, not body tracking).
+// Supplied golfer silhouettes: right-hand image = DTL, left-hand image = Face-On/FOV.
 const guideDTL=$('guideDTL'), guideFace=$('guideFace'), swingGuide=$('swingGuide');
 function setGuide(mode){
   const dtl=mode==='dtl';
   guideDTL.classList.toggle('primary',dtl);
   guideFace.classList.toggle('primary',!dtl);
+  swingGuide.src=dtl?'./golfer_dtl.png':'./golfer_faceon.png';
+  swingGuide.alt=dtl
+    ? 'Right-handed golfer DTL silhouette overlay at 50 percent opacity'
+    : 'Golfer Face-On silhouette overlay at 50 percent opacity';
   $('guideDescription').textContent=dtl
-    ? 'DTL · Right-handed: camera behind you, looking along the target line. Set your feet, hinge from the hips, and place the clubhead behind the ball.'
-    : 'Face-On · Right-handed: camera opposite you, looking across your stance. Ball is opposite the lead (left) foot; keep your full swing in frame.';
-  if(dtl){
-    swingGuide.innerHTML=`
-      <g fill="none" stroke="#a5f02f" stroke-width="5" stroke-dasharray="13 10">
-        <path d="M45 438 H755"/><path d="M600 390 V455"/>
-      </g>
-      <g stroke="#fff" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" fill="#101915" fill-opacity=".45">
-        <!-- right-handed golfer at address, side profile -->
-        <circle cx="330" cy="100" r="34"/>
-        <path d="M300 137 Q275 145 265 185 L245 270 Q240 290 258 300 L280 250 L300 205
-                 Q315 180 345 185 L370 255 L390 305 L410 300 L390 235
-                 Q380 175 355 145 Z"/>
-        <!-- bent knees and feet -->
-        <path d="M300 205 L292 300 L315 390 L355 390 L335 300 L350 220
-                 M350 220 L365 300 L390 390 L430 390 L395 290 L390 220"/>
-        <path d="M315 390 L285 420 L365 420 L355 390
-                 M390 390 L390 420 L465 420 L430 390"/>
-        <!-- arms/hands in front of torso and club -->
-        <path d="M285 180 L350 245 L430 320 L450 310
-                 M355 180 L390 245 L430 320"/>
-        <path d="M440 315 L455 325"/>
-        <path d="M450 320 L590 420" stroke-width="6"/>
-        <path d="M575 413 L605 427" stroke-width="10"/>
-      </g>
-      <g fill="#a5f02f" stroke="#111" stroke-width="3">
-        <circle cx="615" cy="438" r="13"/>
-      </g>
-      <g fill="#111" fill-opacity=".88" stroke="#a5f02f" stroke-width="3">
-        <rect x="28" y="24" width="250" height="48" rx="12"/>
-        <rect x="510" y="330" width="245" height="60" rx="12"/>
-      </g>
-      <g fill="#fff" font-family="Arial,sans-serif" font-size="21" font-weight="700">
-        <text x="45" y="55">RIGHT-HANDED DTL</text>
-        <text x="528" y="355">BALL POSITION</text>
-        <text x="528" y="379" font-size="16">Clubhead behind ball</text>
-      </g>
-      <g fill="none" stroke="#a5f02f" stroke-width="4">
-        <path d="M175 445 H465"/><path d="M175 435 V455 M465 435 V455"/>
-      </g>
-      <text x="245" y="480" fill="#fff" font-size="18" font-family="Arial">Shoulder-width stance</text>`;
-  }else{
-    swingGuide.innerHTML=`
-      <g fill="none" stroke="#a5f02f" stroke-width="5" stroke-dasharray="13 10">
-        <path d="M45 438 H755"/><path d="M400 35 V450"/>
-      </g>
-      <g stroke="#fff" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" fill="#101915" fill-opacity=".45">
-        <!-- right-handed golfer viewed face-on: lead/left side toward target -->
-        <circle cx="400" cy="92" r="36"/>
-        <path d="M365 135 Q335 150 330 205 L340 285 L325 375 L370 375
-                 L400 285 L430 375 L475 375 L460 275 L470 205
-                 Q465 150 435 135 Z"/>
-        <!-- arms together in front, hands and club toward ball -->
-        <path d="M340 170 L375 245 L405 275 L435 245 L465 170
-                 M375 245 L410 275 L435 245"/>
-        <path d="M415 270 L555 420" stroke-width="6"/>
-        <path d="M540 410 L570 425" stroke-width="10"/>
-        <!-- feet -->
-        <path d="M325 375 L300 420 L380 420 L370 375
-                 M430 375 L425 420 L505 420 L475 375"/>
-      </g>
-      <g fill="#a5f02f" stroke="#111" stroke-width="3">
-        <circle cx="585" cy="438" r="13"/>
-      </g>
-      <g fill="#111" fill-opacity=".88" stroke="#a5f02f" stroke-width="3">
-        <rect x="28" y="24" width="250" height="48" rx="12"/>
-        <rect x="495" y="330" width="260" height="60" rx="12"/>
-      </g>
-      <g fill="#fff" font-family="Arial,sans-serif" font-size="21" font-weight="700">
-        <text x="45" y="55">RIGHT-HANDED FACE-ON</text>
-        <text x="513" y="355">BALL POSITION</text>
-        <text x="513" y="379" font-size="16">Opposite lead (left) foot</text>
-      </g>
-      <text x="245" y="480" fill="#fff" font-size="18" font-family="Arial">Shoulder-width stance</text>`;
-  }
+    ? 'DTL · Right-handed: use the right-hand silhouette from your reference image. Camera behind you, looking along the target line.'
+    : 'Face-On / FOV: use the left-hand silhouette from your reference image. Camera opposite you, looking across your stance.';
 }
 guideDTL.onclick=()=>setGuide('dtl');
 guideFace.onclick=()=>setGuide('face');
